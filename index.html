@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="War Room">
 <meta name="mobile-web-app-capable" content="yes">
-<title>AI Trading War Room v5.9</title>
+<title>AI Trading War Room v6.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -403,7 +403,7 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v5.9 · XAUUSD · BTC</span></div>
+  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.0 · XAUUSD · BTC · 5 Strategies</span></div>
   <div class="hr">
     <div class="pill live"><div class="pdot"></div><span id="feed-lbl">CONNECTING</span></div>
     <span class="pill" id="clk">--:--:-- IST</span>
@@ -536,41 +536,126 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
     <div class="tfc" style="border-color:rgba(240,192,64,.18)"><div class="tfh"><span class="tfn" style="color:var(--gold)">5M/1M — EXECUTE</span><span class="tfb" id="tf5" style="color:var(--amber)">WAIT</span></div><div class="tfd" id="tf5-d">Waiting...</div><div style="font-family:var(--mono);font-size:8px;color:var(--gold);margin-top:5px" id="tf5-l">---</div></div>
   </div>
 
-  <!-- CONSENSUS -->
-  <div class="stitle">Team Consensus</div>
-  <div class="card">
+  <!-- ═══ STRATEGY CONSENSUS ═══ -->
+  <div class="stitle">Strategy Consensus</div>
+  <div class="card" style="margin-bottom:11px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:11px;flex-wrap:wrap">
       <div style="flex:1;min-width:200px">
         <div class="votes">
-          <div class="vc"><div class="vb wait" id="v-anna">WAIT</div><div class="vn">Anna</div></div>
-          <div class="vc"><div class="vb wait" id="v-raj">WAIT</div><div class="vn">Raj</div></div>
-          <div class="vc"><div class="vb wait" id="v-max">WAIT</div><div class="vn">Max</div></div>
-          <div class="vc"><div class="vb wait" id="v-zoe">WAIT</div><div class="vn">Zoe</div></div>
-          <div class="vc"><div class="vb wait" id="v-leo">WAIT</div><div class="vn">Leo</div></div>
-          <div class="vc"><div class="vb wait" id="v-fib">WAIT</div><div class="vn">Fib</div></div>
+          <div class="vc"><div class="vb wait" id="v-sr">WAIT</div><div class="vn">S/R</div></div>
+          <div class="vc"><div class="vb wait" id="v-zone">WAIT</div><div class="vn">Zone</div></div>
+          <div class="vc"><div class="vb wait" id="v-ema">WAIT</div><div class="vn">EMA</div></div>
+          <div class="vc"><div class="vb wait" id="v-rsi">WAIT</div><div class="vn">RSI</div></div>
+          <div class="vc"><div class="vb wait" id="v-pat">WAIT</div><div class="vn">Pattern</div></div>
         </div>
         <div class="cbar2"><div class="cbuy" id="cb-b" style="width:0%"></div><div class="cwait" id="cb-w" style="width:100%"></div><div class="csell" id="cb-s" style="width:0%"></div></div>
-        <div style="font-family:var(--mono);font-size:8px;color:var(--t3)" id="cons-txt">Waiting for data...</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--t3)" id="cons-text">Calculating strategy confluence...</div>
       </div>
       <div style="text-align:right;min-width:80px">
-        <div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-bottom:2px">VERDICT</div>
-        <div style="font-family:var(--mono);font-size:24px;font-weight:700" id="verdict">---</div>
-        <div style="font-family:var(--mono);font-size:8px;color:var(--t3)" id="rr-lbl">Quality: ---</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-bottom:2px">SCORE</div>
+        <div style="font-family:var(--mono);font-size:28px;font-weight:700" id="cons-score">--</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t3)" id="cons-grade">--/12</div>
       </div>
     </div>
   </div>
 
-  <!-- AGENTS -->
-  <div class="stitle">AI Agents</div>
-  <div class="g3">
-    <div class="ag"><div class="ag-tf">1H + 30M</div><div class="ag-h"><div class="av" style="background:rgba(34,197,94,.1);color:var(--green)">AN</div><div><div class="an">Anna</div><div class="ar">TREND · EMA · STRUCTURE</div></div></div><div class="sig sw" id="ag-anna">Waiting...</div><div class="rw"><span class="rl">1H Trend</span><span id="anna-1h" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">30M Structure</span><span id="anna-30m" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">EMA Position</span><span class="rv" id="anna-ema">---</span></div><div class="rw"><span class="rl">Entry Zone</span><span class="rv" id="anna-entry">---</span></div><div class="rw"><span class="rl">TP1 / TP2</span><span class="rv" id="anna-tp">---</span></div><div class="rw"><span class="rl">Stop Loss</span><span class="rv" style="color:var(--red)" id="anna-sl">---</span></div></div>
-    <div class="ag"><div class="ag-tf">30M + 5M</div><div class="ag-h"><div class="av" style="background:rgba(96,165,250,.1);color:var(--blue)">RJ</div><div><div class="an">Raj</div><div class="ar">SMC · ORDER BLOCKS · FVG</div></div></div><div class="sig sw" id="ag-raj">Waiting...</div><div class="rw"><span class="rl">30M OB Zone</span><span class="rv" id="raj-ob">---</span></div><div class="rw"><span class="rl">30M FVG</span><span class="rv" id="raj-fvg">---</span></div><div class="rw"><span class="rl">5M BOS Signal</span><span id="raj-bos" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">Entry</span><span class="rv" id="raj-entry">---</span></div><div class="rw"><span class="rl">TP1 / TP2</span><span class="rv" id="raj-tp">---</span></div><div class="rw"><span class="rl">Stop Loss</span><span class="rv" style="color:var(--red)" id="raj-sl">---</span></div></div>
-    <div class="ag"><div class="ag-tf">ALL TF</div><div class="ag-h"><div class="av" style="background:rgba(245,158,11,.1);color:var(--amber)">MX</div><div><div class="an">Max</div><div class="ar">RISK MGR · TRADE QUALITY</div></div></div><div class="sig sw" id="ag-max">Waiting...</div><div class="rw"><span class="rl">Trade Quality</span><span id="max-q" class="tag tw">---</span></div><div class="rw"><span class="rl">Lot Size (rec)</span><span class="rv" id="max-lot">---</span></div><div class="rw"><span class="rl">SL Distance</span><span class="rv" id="max-slp">---</span></div><div class="rw"><span class="rl">Max Loss ($)</span><span class="rv" style="color:var(--red)" id="max-loss">---</span></div><div class="rw"><span class="rl">R:R Ratio</span><span class="rv" style="color:var(--green)" id="max-rr">---</span></div><div class="rw"><span class="rl">News Risk</span><span id="max-news" class="tag tw">CHECK</span></div></div>
-    <div class="ag"><div class="ag-tf">5M + 1M</div><div class="ag-h"><div class="av" style="background:rgba(239,68,68,.1);color:var(--red)">ZO</div><div><div class="an">Zoe</div><div class="ar">ENTRY CONFIRMER · 5M/1M</div></div></div><div class="sig sw" id="ag-zoe">Waiting...</div><div class="rw"><span class="rl">5M Momentum</span><span id="zoe-5m" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">1M Signal</span><span id="zoe-1m" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">Volume Confirm</span><span id="zoe-vol" class="tag tw">WAIT</span></div><div class="rw"><span class="rl">Enter When</span><span class="rv" id="zoe-when">---</span></div><div class="rw"><span class="rl">Avoid If</span><span class="rv" style="color:var(--red)" id="zoe-avoid">---</span></div></div>
-    <div class="ag"><div class="ag-tf">MACRO+SESSION</div><div class="ag-h"><div class="av" style="background:rgba(167,139,250,.1);color:var(--purple)">LE</div><div><div class="an">Leo</div><div class="ar">CONTEXT · NEWS · SESSION</div></div></div><div class="sig sw" id="ag-leo">Detecting...</div><div class="rw"><span class="rl">Active Session</span><span class="rv" id="leo-sess">---</span></div><div class="rw"><span class="rl">Best Window</span><span class="rv" id="leo-win">---</span></div><div class="rw"><span class="rl">DXY Direction</span><span id="leo-dxy" class="tag tw">NEUTRAL</span></div><div class="rw"><span class="rl">Today's USD News</span><span class="rv" id="leo-news">---</span></div><div class="rw"><span class="rl">Verdict</span><span id="leo-verd" class="tag tw">WAIT</span></div></div>
-    <div class="ag" style="border-color:rgba(240,192,64,.18)"><div class="ag-tf">30M HIGH/LOW</div><div class="ag-h"><div class="av" style="background:rgba(240,192,64,.1);color:var(--gold)">FB</div><div><div class="an">Fib</div><div class="ar">FIBONACCI · GOLDEN POCKET</div></div></div><div class="sig sw" id="ag-fib">Waiting...</div><div class="rw"><span class="rl">0.618 Golden Pocket</span><span class="rv" style="color:var(--gold)" id="fib-gp">---</span></div><div class="rw"><span class="rl">0.786 Deep</span><span class="rv" id="fib-786">---</span></div><div class="rw"><span class="rl">0.382 Shallow</span><span class="rv" id="fib-382">---</span></div><div class="rw"><span class="rl">Price Position</span><span id="fib-pos" class="tag tw">---</span></div><div class="rw"><span class="rl">Signal</span><span id="fib-tag" class="tag" style="background:rgba(240,192,64,.1);color:var(--gold)">WAIT</span></div></div>
+  <!-- ═══ 5 STRATEGY AGENTS ═══ -->
+  <div class="stitle">Strategy Agents</div>
+  <div class="g3" style="gap:9px;margin-bottom:11px">
+
+    <!-- Agent 1: S/R Agent -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(240,192,64,.15);color:var(--gold)">S/R · 30M+1H</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(240,192,64,.12);color:var(--gold);font-size:9px;font-weight:700">S&R</div>
+        <div><div class="an">Support/Resistance</div><div class="ar">KEY LEVELS · MULTI-TF · HIGH FREQ</div></div>
+      </div>
+      <div class="sig sw" id="ag-sr">Scanning...</div>
+      <div class="rw"><span class="rl">Nearest Support</span><span class="rv" id="sr-sup">---</span></div>
+      <div class="rw"><span class="rl">Nearest Resist</span><span class="rv" id="sr-res">---</span></div>
+      <div class="rw"><span class="rl">Level Strength</span><span class="rv" id="sr-str">---</span></div>
+      <div class="rw"><span class="rl">Price Position</span><span id="sr-pos" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="sr-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <!-- Agent 2: Supply & Demand Zone Agent -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(168,85,247,.15);color:var(--purple)">ZONE · INST</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(168,85,247,.12);color:var(--purple);font-size:9px;font-weight:700">S/D</div>
+        <div><div class="an">Supply & Demand</div><div class="ar">INSTITUTIONAL · ZONE · PRECISION</div></div>
+      </div>
+      <div class="sig sw" id="ag-zone">Scanning...</div>
+      <div class="rw"><span class="rl">Demand Zone</span><span class="rv" id="zn-dem">---</span></div>
+      <div class="rw"><span class="rl">Supply Zone</span><span class="rv" id="zn-sup">---</span></div>
+      <div class="rw"><span class="rl">In Zone?</span><span id="zn-in" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Zone Quality</span><span class="rv" id="zn-q">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="zn-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <!-- Agent 3: EMA Agent -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(34,197,94,.12);color:var(--green)">EMA 50/200</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(34,197,94,.1);color:var(--green);font-size:9px;font-weight:700">EMA</div>
+        <div><div class="an">EMA Crossover</div><div class="ar">TREND · GOLDEN/DEATH · PULLBACK</div></div>
+      </div>
+      <div class="sig sw" id="ag-ema">Scanning...</div>
+      <div class="rw"><span class="rl">EMA 50</span><span class="rv" id="ema-50">---</span></div>
+      <div class="rw"><span class="rl">EMA 200</span><span class="rv" id="ema-200">---</span></div>
+      <div class="rw"><span class="rl">Cross Status</span><span id="ema-cross" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Pullback to EMA</span><span id="ema-pb" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="ema-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <!-- Agent 4: RSI Divergence Agent -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(239,68,68,.12);color:var(--red)">RSI 14 · DIV</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(239,68,68,.1);color:var(--red);font-size:9px;font-weight:700">RSI</div>
+        <div><div class="an">RSI Divergence</div><div class="ar">MOMENTUM · REVERSAL · RSI 14</div></div>
+      </div>
+      <div class="sig sw" id="ag-rsi">Scanning...</div>
+      <div class="rw"><span class="rl">RSI (14)</span><span class="rv" id="rsi-val">---</span></div>
+      <div class="rw"><span class="rl">Zone</span><span id="rsi-zone" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Divergence</span><span id="rsi-div" class="tag tw">NONE</span></div>
+      <div class="rw"><span class="rl">Trend RSI</span><span class="rv" id="rsi-trend">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="rsi-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <!-- Agent 5: Candlestick Pattern Agent -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(96,165,250,.12);color:var(--blue)">PATTERN · 30M</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(96,165,250,.1);color:var(--blue);font-size:9px;font-weight:700">PAT</div>
+        <div><div class="an">Candlestick Pattern</div><div class="ar">PIN BAR · ENGULF · INSIDE BAR</div></div>
+      </div>
+      <div class="sig sw" id="ag-pat">Scanning...</div>
+      <div class="rw"><span class="rl">Last Candle</span><span class="rv" id="pat-last">---</span></div>
+      <div class="rw"><span class="rl">Pattern</span><span id="pat-type" class="tag tw">NONE</span></div>
+      <div class="rw"><span class="rl">At Key Level?</span><span id="pat-level" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Bias</span><span id="pat-bias" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="pat-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <!-- Agent 6: Risk Manager -->
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(20,184,166,.12);color:var(--teal)">RISK MGR</div>
+      <div class="ag-h">
+        <div class="av" style="background:rgba(20,184,166,.1);color:var(--teal);font-size:9px;font-weight:700">RM</div>
+        <div><div class="an">Risk Manager</div><div class="ar">LOT SIZE · SL · R:R · QUALITY</div></div>
+      </div>
+      <div class="sig sw" id="ag-risk">Waiting...</div>
+      <div class="rw"><span class="rl">Trade Quality</span><span id="risk-q" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">SL Distance</span><span class="rv" id="risk-sl">---</span></div>
+      <div class="rw"><span class="rl">Rec. Lot Size</span><span class="rv" id="risk-lot">0.05</span></div>
+      <div class="rw"><span class="rl">R:R Ratio</span><span class="rv" style="color:var(--green)" id="risk-rr">---</span></div>
+      <div class="rw"><span class="rl">Confluence</span><span class="rv" id="risk-conf">---</span></div>
+    </div>
+
   </div>
-  <div class="brow">
+
+<div class="brow">
     <button class="btn buy" onclick="execOrder('BUY')">▶ EXECUTE BUY</button>
     <button class="btn sell" onclick="execOrder('SELL')">▶ EXECUTE SELL</button>
     <button class="btn" onclick="sw('sig',document.querySelectorAll('.tab')[3])">A/A+ Signals →</button>
@@ -1531,107 +1616,330 @@ function updateMTF(){
 }
 
 // ─── AGENTS ──────────────────────────────────────
-function updateAgents(){
-  var p=XAU.price, o=XAU.dailyOpen||p; if(!p) return;
-  var chg=p-o, bull=chg>=0, chgPct=o?(chg/o*100):0;
-  var strong=Math.abs(chgPct)>0.3, overext=Math.abs(chgPct)>0.9;
-  var rng=XAU.high-XAU.low||20;
-  var fib618=fmt2(XAU.high-rng*0.618), fib65=fmt2(XAU.high-rng*0.65), fib786=fmt2(XAU.high-rng*0.786), fib382=fmt2(XAU.high-rng*0.382);
-  var inGolden=Math.abs(p-parseFloat(fib618))<rng*0.03;
-  var sl=fmt2(bull?p-14:p+14), tp1=fmt2(bull?p+22:p-22), tp2=fmt2(bull?p+45:p-45);
-  var ent=fmt2(bull?p-2.5:p+2.5);
-  var obBuy=fmt2(p-6)+' – '+fmt2(p-2), obSell=fmt2(p+2)+' – '+fmt2(p+6);
-  var fvgBuy=fmt2(p-10)+' – '+fmt2(p-6), fvgSell=fmt2(p+6)+' – '+fmt2(p+10);
-
-  // Volume
-  var curV=xauCandles.length?xauCandles[xauCandles.length-1].vol:0;
-  var avgV=xauCandles.length>1?xauCandles.slice(0,-1).reduce(function(a,c){ return a+c.vol; },0)/(xauCandles.length-1):1;
-  var volHigh=curV>avgV*1.3, volVH=curV>avgV*1.8;
-
-  // News
-  var next=getNextNews(); var newsRisk=next&&next.minsAway<=30;
-  set('leo-news', next?next.title.slice(0,22)+' in '+next.minsAway+'m':'No high-impact USD news soon');
-  var ldx=gel('leo-dxy'); if(ldx){ ldx.textContent=bull?'BEARISH':'BULLISH'; ldx.className='tag '+(bull?'ts2':'tb'); }
-
-  // R:R
-  var slPips=Math.round(Math.abs(p-parseFloat(sl))*100);
-  var tp1Pips=Math.round(Math.abs(parseFloat(tp1)-p)*100);
-  var rr=(tp1Pips/slPips).toFixed(1);
-
-  // Quality score
-  var istM=new Date(Date.now()+(5*60+30)*60000), istMins=istM.getUTCHours()*60+istM.getUTCMinutes();
-  var goodSess=(istMins>=810&&istMins<1290)||(istMins>=1110||istMins<=60);
-  var score=0;
-  if(strong) score++;
-  if(inGolden) score+=2;
-  if(volHigh) score++;
-  if(volVH) score++;
-  if(!newsRisk) score++;
-  if(!overext) score++;
-  if(goodSess) score++;
-  if(parseFloat(rr)>=2) score++;
-  var quality=score>=7?'A+':score>=5?'A':score>=3?'B':'C';
-  var qcl=quality==='A+'?'tb':quality==='A'?'tb':quality==='B'?'ti':'ts2';
-
-  // ANNA
-  setSig('ag-anna',bull?'sb':'ss','[1H] '+(bull?'Uptrend — EMA 20 > EMA 50. Higher highs forming. Daily open '+fmt2(o)+' below price.':'Downtrend — EMA 20 < EMA 50. Lower lows forming. Daily open '+fmt2(o)+' above price.')+' [30M] '+(strong?'Strong momentum. Enter first OB retrace.':'Moderate. Wait for OB retrace on 30M.'));
-  setTag('anna-1h',bull?'tb':'ts2',bull?'BULLISH':'BEARISH');
-  setTag('anna-30m',strong?(bull?'tb':'ts2'):'tw',strong?(bull?'UPTREND':'DOWNTREND'):'RANGING');
-  set('anna-ema',bull?'EMA20 > EMA50 (support)':'EMA20 < EMA50 (resistance)');
-  set('anna-entry',ent); set('anna-tp',tp1+' / '+tp2); set('anna-sl',sl);
-
-  // RAJ
-  setSig('ag-raj',bull?'sb':'ss','[30M] '+(bull?'Demand OB at '+obBuy+'. FVG at '+fvgBuy+' unfilled.':'Supply OB at '+obSell+'. FVG at '+fvgSell+' unfilled.')+' [5M] Wait for price to enter OB, then 5M CHoCH or BOS = entry trigger.');
-  set('raj-ob',bull?obBuy:obSell); set('raj-fvg',bull?fvgBuy:fvgSell);
-  setTag('raj-bos',bull?'tb':'ts2',bull?'WAIT BOS↑':'WAIT BOS↓');
-  set('raj-entry',ent); set('raj-tp',tp1+' / '+tp2); set('raj-sl',sl);
-
-  // MAX
-  setSig('ag-max',quality==='A+'||quality==='A'?'sb':quality==='B'?'sw':'sw',
-    'Quality: '+quality+' ('+score+'/8). '+(quality==='A+'?'Excellent — enter with 0.05 lot on 5M confirmation.':
-    quality==='A'?'Good — proceed with 0.05 lot. Verify entry on 1M.':
-    quality==='B'?'Average — reduce lot to 0.03. Wait for volume confirmation.':
-    'Poor setup — skip this trade. Not enough conditions met.'));
-  setTag('max-q',qcl,quality);
-  set('max-lot',quality==='B'?'0.03 (reduced)':quality==='C'?'0.00 (SKIP)':'0.05 (standard)');
-  set('max-slp',slPips+' pips');
-  set('max-loss','$'+fmt2(slPips*0.5*(quality==='B'?0.03:0.05)));
-  set('max-rr','1 : '+rr);
-  setTag('max-news',newsRisk?'ts2':'tb',newsRisk?'⚠ NEWS '+next.minsAway+'M':'CLEAR');
-
-  // ZOE
-  setSig('ag-zoe',overext?'sw':(bull?'sb':'ss'),'[5M+1M] '+(overext?'Overextended ('+Math.abs(chgPct).toFixed(2)+'%). Do NOT chase. Wait for 5M pullback into 30M OB first.':bull?'5M bullish. In OB zone, watch for 1M pin bar or bullish engulfing. Enter on CLOSE of that candle only.':'5M bearish. In OB zone, watch for 1M bearish pin bar or engulfing. Enter on candle CLOSE.'));
-  setTag('zoe-5m',bull?'tb':'ts2',bull?'BULLISH':'BEARISH');
-  setTag('zoe-1m',overext?'tw':(bull?'tb':'ts2'),overext?'WAIT OB RETRACE':(bull?'LOOK PIN/ENG':'LOOK BEAR ENG'));
-  setTag('zoe-vol',volHigh?'tb':'tw',volHigh?'VOL CONFIRM':'LOW VOL');
-  set('zoe-when',bull?'1M close above '+fmt2(p-5)+' inside OB zone + volume spike':'1M close below '+fmt2(p+5)+' inside OB zone + volume spike');
-  set('zoe-avoid',bull?'Price above '+fmt2(p+12)+' — resistance, too late to buy':'Price below '+fmt2(p-12)+' — support, too late to sell');
-
-  // FIB
-  setSig('ag-fib',inGolden?'sb':(bull?'sb':'ss'),inGolden?'★ IN GOLDEN POCKET at '+fib618+'. Highest probability. Enter on 1M rejection candle. SL below '+fib786+'.':(bull?'Watch golden pocket '+fib618+' – '+fib65+'. Price at '+fmt2(p)+' — wait for pullback into this zone.':'Price near or above 0.618 at '+fib618+'. Sell area — look for 1M rejection here.'));
-  set('fib-gp',fib618+' – '+fib65); set('fib-786',fib786); set('fib-382',fib382);
-  setTag('fib-pos',inGolden?'tb':'tw',inGolden?'IN GOLDEN PKT':p<parseFloat(fib618)?'BELOW 0.618':'ABOVE 0.618');
-  var ft=gel('fib-tag');
-  if(ft){ ft.textContent=inGolden?'★ GOLDEN PKT':(bull?'WATCH BUY':'WATCH SELL'); if(inGolden){ft.className='tag';ft.style.background='rgba(240,192,64,.15)';ft.style.color='var(--gold)';}else{ft.className='tag '+(bull?'tb':'ts2');ft.style.background='';ft.style.color='';} }
-
-  // CONSENSUS
-  var v={anna:bull?'buy':'sell',raj:bull?'buy':'sell',max:quality==='C'?'wait':(newsRisk?'wait':(bull?'buy':'sell')),zoe:overext?'wait':(bull?'buy':'sell'),leo:bull?'buy':'sell',fib:inGolden?'buy':'wait'};
-  var bc=0,wc=0,sc=0;
-  Object.entries(v).forEach(function(kv){
-    var el=gel('v-'+kv[0]); if(el){ el.textContent=kv[1].toUpperCase(); el.className='vb '+kv[1]; }
-    if(kv[1]==='buy')bc++;else if(kv[1]==='sell')sc++;else wc++;
-  });
-  var tot=bc+wc+sc;
-  gel('cb-b').style.width=(bc/tot*100)+'%';
-  gel('cb-w').style.width=(wc/tot*100)+'%';
-  gel('cb-s').style.width=(sc/tot*100)+'%';
-  set('cons-txt',bc+' BUY · '+wc+' WAIT · '+sc+' SELL');
-  var vd=bc>sc?'BUY':sc>bc?'SELL':'WAIT';
-  var vel=gel('verdict'); if(vel){ vel.textContent=vd; vel.style.color=vd==='BUY'?'var(--green)':vd==='SELL'?'var(--red)':'var(--amber)'; }
-  set('rr-lbl','Quality: '+quality+' · R:R 1:'+rr);
+function calcEMA(prices, period){
+  if(prices.length < period) return null;
+  var k = 2/(period+1);
+  var ema = prices.slice(0,period).reduce(function(a,b){return a+b;},0)/period;
+  for(var i=period;i<prices.length;i++) ema = prices[i]*k + ema*(1-k);
+  return ema;
 }
 
-// ─── BTC AGENTS ──────────────────────────────────
+function calcRSI(closes, period){
+  if(closes.length < period+1) return null;
+  var gains=0, losses=0;
+  for(var i=closes.length-period;i<closes.length;i++){
+    var diff=closes[i]-closes[i-1];
+    if(diff>0) gains+=diff; else losses+=Math.abs(diff);
+  }
+  if(losses===0) return 100;
+  var rs=gains/losses;
+  return 100-(100/(1+rs));
+}
+
+function detectSRLevels(candles){
+  // Find price levels touched multiple times (within 0.3% tolerance)
+  var levels=[];
+  var tol=XAU.price*0.003;
+  for(var i=1;i<candles.length-1;i++){
+    var h=candles[i].high, l=candles[i].low;
+    // Count how many other candles touch this level
+    function countTouches(level){
+      var touches=0;
+      for(var j=0;j<candles.length;j++){
+        if(Math.abs(candles[j].high-level)<tol||Math.abs(candles[j].low-level)<tol) touches++;
+      }
+      return touches;
+    }
+    var ht=countTouches(h), lt=countTouches(l);
+    if(ht>=3) levels.push({price:h,touches:ht,type:candles[i].close>candles[i].open?'res':'sup'});
+    if(lt>=3) levels.push({price:l,touches:lt,type:candles[i].close<candles[i].open?'sup':'res'});
+  }
+  // Deduplicate levels within tolerance
+  var deduped=[];
+  levels.sort(function(a,b){return b.touches-a.touches;});
+  levels.forEach(function(lv){
+    if(!deduped.some(function(d){return Math.abs(d.price-lv.price)<tol;})) deduped.push(lv);
+  });
+  return deduped.slice(0,8);
+}
+
+function detectSupplyDemandZones(candles){
+  // Supply zone: strong bearish candle after consolidation (institutional selling)
+  // Demand zone: strong bullish candle after consolidation (institutional buying)
+  var zones=[];
+  var tol=XAU.price*0.004;
+  for(var i=2;i<candles.length-1;i++){
+    var body=Math.abs(candles[i].close-candles[i].open);
+    var range=candles[i].high-candles[i].low;
+    var bodyRatio=range>0?body/range:0;
+    var isStrong=bodyRatio>0.7; // strong bodied candle
+    var isBull=candles[i].close>candles[i].open;
+    var prevRange=candles[i-1].high-candles[i-1].low;
+    var isExplosive=range>prevRange*1.5; // much bigger than prev candle
+    if(isStrong && isExplosive){
+      if(isBull){
+        // Demand zone: base of the move (bottom of the strong bull candle)
+        zones.push({type:'demand',top:Math.max(candles[i].open,candles[i].close)*1.001,
+          bottom:Math.min(candles[i].open,candles[i].close)*0.999,strength:'Strong'});
+      } else {
+        // Supply zone: top of the strong bear candle
+        zones.push({type:'supply',top:Math.max(candles[i].open,candles[i].close)*1.001,
+          bottom:Math.min(candles[i].open,candles[i].close)*0.999,strength:'Strong'});
+      }
+    }
+  }
+  return zones.slice(-6);
+}
+
+function detectCandlePattern(candles){
+  if(candles.length<3) return {name:'NONE',bias:'neutral',strength:0};
+  var c0=candles[candles.length-1]; // current
+  var c1=candles[candles.length-2]; // prev
+  var c2=candles[candles.length-3]; // 2 back
+  var body0=Math.abs(c0.close-c0.open);
+  var range0=c0.high-c0.low;
+  var upperWick0=c0.high-Math.max(c0.open,c0.close);
+  var lowerWick0=Math.min(c0.open,c0.close)-c0.low;
+
+  // PIN BAR: small body, one large wick (>2x body), at least 1/3 of range is wick
+  var isPinBull=lowerWick0>body0*2 && lowerWick0>range0*0.6 && upperWick0<body0;
+  var isPinBear=upperWick0>body0*2 && upperWick0>range0*0.6 && lowerWick0<body0;
+  if(isPinBull) return {name:'PIN BAR BULL',bias:'bull',strength:3};
+  if(isPinBear) return {name:'PIN BAR BEAR',bias:'bear',strength:3};
+
+  // ENGULFING: current candle body fully covers previous candle body
+  var body1=Math.abs(c1.close-c1.open);
+  var bull0=c0.close>c0.open, bull1=c1.close>c1.open;
+  if(!bull1 && bull0 && c0.open<c1.close && c0.close>c1.open && body0>body1*1.1)
+    return {name:'BULL ENGULF',bias:'bull',strength:3};
+  if(bull1 && !bull0 && c0.open>c1.close && c0.close<c1.open && body0>body1*1.1)
+    return {name:'BEAR ENGULF',bias:'bear',strength:3};
+
+  // INSIDE BAR: current candle entirely within previous candle range
+  var isInside=c0.high<c1.high && c0.low>c1.low;
+  if(isInside){
+    var breakDir=c0.close>c1.open?'bull':'bear';
+    return {name:'INSIDE BAR',bias:breakDir,strength:1};
+  }
+
+  // DOJI: very small body
+  if(body0<range0*0.1 && range0>0) return {name:'DOJI',bias:'neutral',strength:0};
+
+  // HAMMER / SHOOTING STAR (weaker versions)
+  if(lowerWick0>body0*1.5 && lowerWick0>range0*0.4) return {name:'HAMMER',bias:'bull',strength:2};
+  if(upperWick0>body0*1.5 && upperWick0>range0*0.4) return {name:'SHOOT STAR',bias:'bear',strength:2};
+
+  return {name:'NONE',bias:'neutral',strength:0};
+}
+
+function updateAgents(){
+  var p=XAU.price; if(!p) return;
+  var candles=xauCandles;
+  if(!candles||candles.length<5){
+    ['ag-sr','ag-zone','ag-ema','ag-rsi','ag-pat','ag-risk'].forEach(function(id){
+      setSig(id,'sw','Waiting for candle data...');
+    });
+    return;
+  }
+
+  var closes=candles.map(function(c){return c.close;});
+  var highs=candles.map(function(c){return c.high;});
+  var lows=candles.map(function(c){return c.low;});
+  var rng=XAU.high-XAU.low||20;
+  var bull=(p-(XAU.dailyOpen||p))>=0;
+
+  // ── AGENT 1: Support & Resistance ──
+  var srLevels=detectSRLevels(candles);
+  var supports=srLevels.filter(function(l){return l.price<p;}).sort(function(a,b){return b.price-a.price;});
+  var resistances=srLevels.filter(function(l){return l.price>p;}).sort(function(a,b){return a.price-b.price;});
+  var nearSup=supports[0], nearRes=resistances[0];
+  var distSup=nearSup?Math.round(Math.abs(p-nearSup.price)*100):null;
+  var distRes=nearRes?Math.round(Math.abs(p-nearRes.price)*100):null;
+  var atSupport=distSup&&distSup<(rng*100*0.15);
+  var atResist=distRes&&distRes<(rng*100*0.15);
+  var srScore=0;
+  var srBias='neutral', srSignal='WAIT';
+  if(atSupport){srScore+=2;srBias='bull';srSignal='BUY — At Support';}
+  else if(atResist){srScore+=2;srBias='bear';srSignal='SELL — At Resistance';}
+  else if(distSup&&distRes){
+    var ratio=(p-(nearSup.price))/(nearRes.price-(nearSup.price));
+    if(ratio<0.3){srScore++;srBias='bull';srSignal='WATCH BUY (near sup)';}
+    else if(ratio>0.7){srScore++;srBias='bear';srSignal='WATCH SELL (near res)';}
+    else srSignal='MID RANGE — WAIT';
+  }
+  if(nearSup&&nearSup.touches>=5){srScore++;}
+  set('sr-sup',nearSup?fmt2(nearSup.price)+' ('+nearSup.touches+'×)':'No level');
+  set('sr-res',nearRes?fmt2(nearRes.price)+' ('+nearRes.touches+'×)':'No level');
+  set('sr-str',srLevels.length+' levels found');
+  setTag('sr-pos',atSupport?'tb':atResist?'ts2':'tw',atSupport?'AT SUPPORT':atResist?'AT RESIST':'BETWEEN');
+  setTag('sr-sig',srBias==='bull'?'tb':srBias==='bear'?'ts2':'tw',srSignal);
+  setSig('ag-sr',srBias==='bull'?'sb':srBias==='bear'?'ss':'sw',srSignal+(nearSup?' · S:'+fmt2(nearSup.price):'')+(nearRes?' · R:'+fmt2(nearRes.price):''));
+  set('v-sr',''); var vSR=gel('v-sr'); if(vSR){vSR.className='vb '+(srBias==='bull'?'buy':srBias==='bear'?'sell':'wait');vSR.textContent=srBias==='bull'?'BUY':srBias==='bear'?'SELL':'WAIT';}
+
+  // ── AGENT 2: Supply & Demand Zones ──
+  var sdZones=detectSupplyDemandZones(candles);
+  var demandZones=sdZones.filter(function(z){return z.type==='demand'&&z.top>p*0.98&&z.top<p*1.02;});
+  var supplyZones=sdZones.filter(function(z){return z.type==='supply'&&z.bottom<p*1.02&&z.bottom>p*0.98;});
+  var allDemand=sdZones.filter(function(z){return z.type==='demand';}).sort(function(a,b){return b.top-a.top;});
+  var allSupply=sdZones.filter(function(z){return z.type==='supply';}).sort(function(a,b){return a.bottom-b.bottom;});
+  var nearDem=allDemand.find(function(z){return z.top<p;});
+  var nearSup2=allSupply.find(function(z){return z.bottom>p;});
+  var inDemand=demandZones.length>0;
+  var inSupply=supplyZones.length>0;
+  var zoneScore=0, zoneBias='neutral', zoneSignal='WAIT';
+  if(inDemand){zoneScore+=2;zoneBias='bull';zoneSignal='BUY — In Demand Zone';}
+  else if(inSupply){zoneScore+=2;zoneBias='bear';zoneSignal='SELL — In Supply Zone';}
+  else if(nearDem&&Math.abs(p-nearDem.top)<rng*0.2){zoneScore++;zoneBias='bull';zoneSignal='APPROACHING Demand';}
+  else if(nearSup2&&Math.abs(p-nearSup2.bottom)<rng*0.2){zoneScore++;zoneBias='bear';zoneSignal='APPROACHING Supply';}
+  set('zn-dem',nearDem?fmt2(nearDem.bottom)+' – '+fmt2(nearDem.top):'No zone below');
+  set('zn-sup',nearSup2?fmt2(nearSup2.bottom)+' – '+fmt2(nearSup2.top):'No zone above');
+  setTag('zn-in',inDemand?'tb':inSupply?'ts2':'tw',inDemand?'IN DEMAND':inSupply?'IN SUPPLY':'BETWEEN');
+  set('zn-q',(inDemand||inSupply)?'Strong — Institutional':'Waiting for zone');
+  setTag('zn-sig',zoneBias==='bull'?'tb':zoneBias==='bear'?'ts2':'tw',zoneSignal);
+  setSig('ag-zone',zoneBias==='bull'?'sb':zoneBias==='bear'?'ss':'sw',zoneSignal);
+  set('v-zone',''); var vZone=gel('v-zone'); if(vZone){vZone.className='vb '+(zoneBias==='bull'?'buy':zoneBias==='bear'?'sell':'wait');vZone.textContent=zoneBias==='bull'?'BUY':zoneBias==='bear'?'SELL':'WAIT';}
+
+  // ── AGENT 3: EMA Crossover ──
+  var ema50=calcEMA(closes,50);
+  var ema200=calcEMA(closes,200);
+  var prevCloses=closes.slice(0,-1);
+  var prevEma50=prevCloses.length>=50?calcEMA(prevCloses,50):null;
+  var prevEma200=prevCloses.length>=200?calcEMA(prevCloses,200):null;
+  var emaScore=0, emaBias='neutral', emaSignal='WAIT';
+  var goldenCross=false, deathCross=false, crossRecent=false;
+  if(ema50&&ema200){
+    var bullTrend=ema50>ema200;
+    if(bullTrend) emaScore++; else if(!bullTrend) emaScore++;
+    // Golden/Death cross detection
+    if(prevEma50&&prevEma200){
+      if(ema50>ema200&&prevEma50<=prevEma200){goldenCross=true;crossRecent=true;}
+      else if(ema50<ema200&&prevEma50>=prevEma200){deathCross=true;crossRecent=true;}
+    }
+    if(goldenCross){emaScore+=2;emaBias='bull';emaSignal='GOLDEN CROSS — Strong BUY';}
+    else if(deathCross){emaScore+=2;emaBias='bear';emaSignal='DEATH CROSS — Strong SELL';}
+    else if(bullTrend){
+      emaBias='bull';
+      // Pullback to EMA50? (Price within 0.3% of EMA50)
+      if(Math.abs(p-ema50)<p*0.003){emaScore+=2;emaSignal='PULLBACK TO EMA50 — Buy dip';}
+      else if(p>ema50&&p>ema200){emaScore++;emaSignal='BULL TREND — Above both EMAs';}
+      else emaSignal='BULL TREND — Await pullback';
+    } else {
+      emaBias='bear';
+      if(Math.abs(p-ema50)<p*0.003){emaScore+=2;emaSignal='PULLBACK TO EMA50 — Sell rally';}
+      else if(p<ema50&&p<ema200){emaScore++;emaSignal='BEAR TREND — Below both EMAs';}
+      else emaSignal='BEAR TREND — Await rally';
+    }
+    set('ema-50',fmt2(ema50));
+    set('ema-200',ema200?fmt2(ema200):'Need 200 bars');
+    setTag('ema-cross',goldenCross?'tb':deathCross?'ts2':ema50>ema200?'ti':'tw',
+      goldenCross?'GOLDEN CROSS ★':deathCross?'DEATH CROSS ★':ema50>ema200?'BULL (50>200)':'BEAR (50<200)');
+    setTag('ema-pb',Math.abs(p-ema50)<p*0.003?'tb':'tw',
+      Math.abs(p-ema50)<p*0.003?'AT EMA50 ✓':'Distance: '+Math.round(Math.abs(p-ema50)*100)+'p');
+  } else {
+    set('ema-50',closes.length<50?'Need '+(50-closes.length)+' bars':fmt2(ema50||0));
+    set('ema-200',closes.length<200?'Need '+(200-closes.length)+' bars':fmt2(ema200||0));
+    setTag('ema-cross','tw','LOADING...');
+    setTag('ema-pb','tw','...');
+    emaSignal='Need more candle data';
+  }
+  setTag('ema-sig',emaBias==='bull'?'tb':emaBias==='bear'?'ts2':'tw',emaSignal);
+  setSig('ag-ema',emaBias==='bull'?'sb':emaBias==='bear'?'ss':'sw',emaSignal+(ema50?' · EMA50:'+fmt2(ema50):''));
+  set('v-ema',''); var vEma=gel('v-ema'); if(vEma){vEma.className='vb '+(emaBias==='bull'?'buy':emaBias==='bear'?'sell':'wait');vEma.textContent=emaBias==='bull'?'BUY':emaBias==='bear'?'SELL':'WAIT';}
+
+  // ── AGENT 4: RSI Divergence ──
+  var rsi=calcRSI(closes,14);
+  var rsiScore=0, rsiBias='neutral', rsiSignal='WAIT';
+  var rsiDiv='NONE';
+  if(rsi!==null){
+    var rsiVal=Math.round(rsi*10)/10;
+    // RSI zones
+    var rsiOB=rsi>70, rsiOS=rsi<30, rsiN=rsi>=40&&rsi<=60;
+    if(rsiOS){rsiScore++;rsiBias='bull';rsiSignal='RSI OVERSOLD ('+rsiVal+') — Watch BUY';}
+    else if(rsiOB){rsiScore++;rsiBias='bear';rsiSignal='RSI OVERBOUGHT ('+rsiVal+') — Watch SELL';}
+    // RSI Divergence: compare price direction to RSI direction over last 5 candles
+    if(closes.length>=6){
+      var prevRSI=calcRSI(closes.slice(0,-3),14);
+      if(prevRSI!==null){
+        var priceUp=closes[closes.length-1]>closes[closes.length-4];
+        var rsiUp=rsi>prevRSI;
+        if(priceUp&&!rsiUp&&rsi>50){rsiDiv='BEARISH DIV';rsiScore+=2;rsiBias='bear';rsiSignal='BEARISH DIVERGENCE — Price up, RSI down';}
+        else if(!priceUp&&rsiUp&&rsi<50){rsiDiv='BULLISH DIV';rsiScore+=2;rsiBias='bull';rsiSignal='BULLISH DIVERGENCE — Price down, RSI up';}
+      }
+    }
+    set('rsi-val',rsiVal.toFixed(1));
+    setTag('rsi-zone',rsiOS?'tb':rsiOB?'ts2':rsiN?'ti':'tw',
+      rsiOS?'OVERSOLD <30':rsiOB?'OVERBOUGHT >70':rsiN?'NEUTRAL 40-60':'NORMAL '+Math.round(rsi));
+    setTag('rsi-div',rsiDiv!=='NONE'?(rsiBias==='bear'?'ts2':'tb'):'tw',rsiDiv);
+    set('rsi-trend',rsi>50?'Bullish momentum (>50)':'Bearish momentum (<50)');
+  } else {
+    set('rsi-val','Loading...');
+    setTag('rsi-zone','tw','NEED 14+ BARS');
+    setTag('rsi-div','tw','NONE');
+    set('rsi-trend','Calculating...');
+    rsiSignal='Need more data';
+  }
+  setTag('rsi-sig',rsiBias==='bull'?'tb':rsiBias==='bear'?'ts2':'tw',rsiSignal);
+  setSig('ag-rsi',rsiBias==='bull'?'sb':rsiBias==='bear'?'ss':'sw',rsiSignal+(rsi?' · RSI:'+Math.round(rsi):''));
+  set('v-rsi',''); var vRsi=gel('v-rsi'); if(vRsi){vRsi.className='vb '+(rsiBias==='bull'?'buy':rsiBias==='bear'?'sell':'wait');vRsi.textContent=rsiBias==='bull'?'BUY':rsiBias==='bear'?'SELL':'WAIT';}
+
+  // ── AGENT 5: Candlestick Pattern ──
+  var pattern=detectCandlePattern(candles);
+  var patScore=pattern.strength;
+  var patBias=pattern.bias, patSignal='WAIT';
+  var lastC=candles[candles.length-1];
+  var lastBody=Math.abs(lastC.close-lastC.open);
+  // Check if pattern is at a key level (S/R or S/D zone)
+  var patAtLevel=atSupport||atResist||inDemand||inSupply;
+  if(patAtLevel&&patScore>0) patScore++; // bonus for pattern at key level
+  if(patBias==='bull'&&patScore>=2){patSignal='BUY — '+pattern.name+' at '+(atSupport?'Support':inDemand?'Demand Zone':'Level');}
+  else if(patBias==='bear'&&patScore>=2){patSignal='SELL — '+pattern.name+' at '+(atResist?'Resistance':inSupply?'Supply Zone':'Level');}
+  else if(pattern.name!=='NONE'){patSignal=pattern.name+' — Needs confluence';}
+  else patSignal='No strong pattern';
+  set('pat-last',lastC?'O:'+fmt2(lastC.open)+' C:'+fmt2(lastC.close):'---');
+  setTag('pat-type',patBias==='bull'?'tb':patBias==='bear'?'ts2':'tw',pattern.name);
+  setTag('pat-level',patAtLevel?'tb':'tw',patAtLevel?'YES — Key Level':'NOT at key level');
+  setTag('pat-bias',patBias==='bull'?'tb':patBias==='bear'?'ts2':'tw',
+    patBias==='bull'?'BULLISH':patBias==='bear'?'BEARISH':'NEUTRAL');
+  setTag('pat-sig',patBias==='bull'&&patScore>=2?'tb':patBias==='bear'&&patScore>=2?'ts2':'tw',patSignal);
+  setSig('ag-pat',patBias==='bull'&&patScore>=2?'sb':patBias==='bear'&&patScore>=2?'ss':'sw',patSignal);
+  set('v-pat',''); var vPat=gel('v-pat'); if(vPat){vPat.className='vb '+(patBias==='bull'&&patScore>=2?'buy':patBias==='bear'&&patScore>=2?'sell':'wait');vPat.textContent=patBias==='bull'&&patScore>=2?'BUY':patBias==='bear'&&patScore>=2?'SELL':'WAIT';}
+
+  // ── CONSENSUS ──
+  var totalScore=srScore+zoneScore+emaScore+rsiScore+Math.min(patScore,3);
+  var buyVotes=[srBias==='bull',zoneBias==='bull',emaBias==='bull',rsiBias==='bull',patBias==='bull'&&patScore>=2].filter(Boolean).length;
+  var sellVotes=[srBias==='bear',zoneBias==='bear',emaBias==='bear',rsiBias==='bear',patBias==='bear'&&patScore>=2].filter(Boolean).length;
+  var consDir=buyVotes>sellVotes?'BUY':sellVotes>buyVotes?'SELL':'WAIT';
+  var consBuy=buyVotes/5*100, consSell=sellVotes/5*100, consWait=100-consBuy-consSell;
+  var cb=gel('cb-b'),cw=gel('cb-w'),cs=gel('cb-s');
+  if(cb) cb.style.width=consBuy+'%';
+  if(cw) cw.style.width=Math.max(0,consWait)+'%';
+  if(cs) cs.style.width=consSell+'%';
+  set('cons-text',buyVotes+' BUY · '+sellVotes+' SELL · '+(5-buyVotes-sellVotes)+' WAIT — '+
+    (consDir==='BUY'?'BULLISH BIAS':consDir==='SELL'?'BEARISH BIAS':'NO CLEAR DIRECTION'));
+  set('cons-score',totalScore);
+  set('cons-grade',totalScore+'/12');
+  var scoreEl=gel('cons-score');
+  if(scoreEl) scoreEl.style.color=totalScore>=8?'var(--green)':totalScore>=5?'var(--amber)':'var(--t3)';
+
+  // ── AGENT 6: Risk Manager ──
+  var obSize=Math.max(rng*0.18,0.40);
+  var slDist=obSize+0.05;
+  var tp1Dist=slDist*2.5;
+  var slPips=Math.round(slDist*100);
+  var tp1Pips=Math.round(tp1Dist*100);
+  var rr=(tp1Pips/slPips).toFixed(1);
+  var quality=totalScore>=8?'A+':totalScore>=6?'A':totalScore>=4?'B':'C';
+  var qColor=quality==='A+'?'var(--green)':quality==='A'?'var(--blue)':quality==='B'?'var(--amber)':'var(--red)';
+  set('risk-q',''); setTag('risk-q',quality==='A+'?'tb':quality==='A'?'ti':quality==='B'?'tw':'ts2',quality+' GRADE · Score '+totalScore+'/12');
+  set('risk-sl',slPips+' pips ($'+fmt2(slDist)+')');
+  set('risk-lot','0.05 lot · Risk $'+fmt2(slPips*0.5*0.05));
+  set('risk-rr','1:'+rr+' R:R'+(parseFloat(rr)>=2.5?' ✓':''));
+  set('risk-conf',buyVotes+' of 5 strategies agree ('+Math.round(buyVotes/5*100)+'%)');
+  setSig('ag-risk',quality==='A+'||quality==='A'?'sb':'sw',
+    quality+' SETUP · '+consDir+' · Score '+totalScore+'/12 · SL '+slPips+'p · R:R 1:'+rr);
+}
+
+
 function updateAgentsBTC(){
   var p=BTC.price, o=BTC.dailyOpen||p; if(!p) return;
   var chg=p-o, bull=chg>=0;
@@ -2173,124 +2481,173 @@ function checkForSignal(){
   if(now-lastSigCheck<60000) return;
   lastSigCheck=now;
 
-  var chg=p-o, bull=chg>=0, chgPct=o?(chg/o*100):0;
-  var strong=Math.abs(chgPct)>0.2, overext=Math.abs(chgPct)>1.2;
-  var rng=XAU.high-XAU.low||20;
-  var fib618=XAU.high-rng*0.618;
-  var fib705=XAU.high-rng*0.705;
-  var fib382=XAU.high-rng*0.382;
-  var inGolden=Math.abs(p-fib618)<rng*0.05;
-  var inOTE=Math.abs(p-fib705)<rng*0.06;
-  var inShallow=Math.abs(p-fib382)<rng*0.05;
+  var candles=xauCandles;
+  if(!candles||candles.length<10) return;
 
+  var closes=candles.map(function(c){return c.close;});
+  var rng=XAU.high-XAU.low||20;
+  var chg=p-o, chgPct=o?(chg/o*100):0;
+  var bull=chg>=0;
+
+  // ── SESSION FILTER ──
   var ist=new Date(now+(5*60+30)*60000);
   var istMins=ist.getUTCHours()*60+ist.getUTCMinutes();
   var kzName=getKZName(istMins);
-  var inTradingKZ=kzName==='LONDON_KZ'||kzName==='NY_KZ'||kzName==='SILVER_BULLET';
   if(kzName==='DEAD_ZONE'||kzName==='OFF_HOURS') return;
-  var sessionName=kzName==='SILVER_BULLET'?'Silver Bullet':kzName==='NY_KZ'?'NY Kill Zone':kzName==='LONDON_KZ'?'London KZ':kzName==='ASIAN'?'Asian':kzName==='LONDON_CLOSE'?'London Close':'Session';
+  var inPrimeKZ=kzName==='LONDON_KZ'||kzName==='NY_KZ'||kzName==='SILVER_BULLET';
+  var sessionName=kzName==='SILVER_BULLET'?'Silver Bullet':
+    kzName==='NY_KZ'?'NY KZ':kzName==='LONDON_KZ'?'London KZ':
+    kzName==='ASIAN'?'Asian':kzName==='LONDON_CLOSE'?'London Close':'Session';
 
+  // Min range / doji filters
   if((rng*100)<60) return;
   if(Math.abs(chgPct)<0.02) return;
 
-  var judasSwept=false;
-  if(asianHigh&&asianLow){
-    if(bull&&XAU.low<asianLow&&p>asianLow) judasSwept=true;
-    if(!bull&&XAU.high>asianHigh&&p<asianHigh) judasSwept=true;
-  }
-  var nearPDH=PDH&&Math.abs(p-PDH)<(rng*0.12);
-  var nearPDL=PDL&&Math.abs(p-PDL)<(rng*0.12);
-  var pdConfluence=bull?nearPDL:nearPDH;
-  var psych=Math.round(p/100)*100;
-  var nearPsych=Math.abs(p-psych)<(rng*0.15);
-
-  // 2-hour cooldown per direction (was 4hr - too restrictive)
+  // ── COOLDOWN: 2hr per direction ──
   var lastSigThisDir=bull?lastSigTimeBuy:lastSigTimeSell;
   if(now-lastSigThisDir<7200000) return;
 
-  // Max 3 signals per direction per day (was 2)
+  // ── MAX 3 PER DIRECTION PER DAY ──
   var todayIST=getISTDateStr();
   var allSigs=loadSignals();
-  var todayDirCount=allSigs.filter(function(s){ return s.date===todayIST&&s.dir===(bull?'BUY':'SELL'); }).length;
+  var todayDirCount=allSigs.filter(function(s){return s.date===todayIST&&s.dir===(bull?'BUY':'SELL');}).length;
   if(todayDirCount>=3) return;
 
-  var curV=xauCandles.length?xauCandles[xauCandles.length-1].vol:0;
-  var avgV=xauCandles.length>1?xauCandles.slice(0,-1).reduce(function(a,c){ return a+c.vol; },0)/(xauCandles.length-1):1;
-  var volHigh=curV>avgV*1.2;
+  // ── STRATEGY 1: S/R ──
+  var srLevels=detectSRLevels(candles);
+  var supports=srLevels.filter(function(l){return l.price<p;}).sort(function(a,b){return b.price-a.price;});
+  var resistances=srLevels.filter(function(l){return l.price>p;}).sort(function(a,b){return a.price-b.price;});
+  var nearSup=supports[0], nearRes=resistances[0];
+  var atSupport=nearSup&&Math.abs(p-nearSup.price)<(rng*0.15);
+  var atResist=nearRes&&Math.abs(p-nearRes.price)<(rng*0.15);
+  var srBias=atSupport?'bull':atResist?'bear':'neutral';
+  var srScore=atSupport&&nearSup.touches>=4?2:atSupport?1:atResist&&nearRes.touches>=4?2:atResist?1:0;
 
-  var next=getNextNews(); var newsRisk=next&&next.minsAway<=15;
+  // ── STRATEGY 2: S/D ZONES ──
+  var sdZones=detectSupplyDemandZones(candles);
+  var inDemand=sdZones.some(function(z){return z.type==='demand'&&z.top>p*0.998&&z.top<p*1.002;});
+  var inSupply=sdZones.some(function(z){return z.type==='supply'&&z.bottom<p*1.002&&z.bottom>p*0.998;});
+  var zoneBias=inDemand?'bull':inSupply?'bear':'neutral';
+  var zoneScore=inDemand||inSupply?2:0;
 
-  var obSize=Math.max(rng*0.18,0.40);  // min 40 pips SL for gold
+  // ── STRATEGY 3: EMA ──
+  var ema50=calcEMA(closes,50);
+  var ema200=calcEMA(closes,200);
+  var prevCloses=closes.slice(0,-1);
+  var prevEma50=calcEMA(prevCloses,50);
+  var prevEma200=calcEMA(prevCloses,200);
+  var goldenCross=ema50&&ema200&&prevEma50&&prevEma200&&ema50>ema200&&prevEma50<=prevEma200;
+  var deathCross=ema50&&ema200&&prevEma50&&prevEma200&&ema50<ema200&&prevEma50>=prevEma200;
+  var bullTrend=ema50&&ema200&&ema50>ema200;
+  var pullbackToEMA=ema50&&Math.abs(p-ema50)<p*0.003;
+  var emaBias=goldenCross||bullTrend?'bull':deathCross||(!bullTrend&&ema50)?'bear':'neutral';
+  var emaScore=goldenCross||deathCross?2:pullbackToEMA&&bullTrend?2:bullTrend&&p>ema50?1:ema50&&!bullTrend&&p<ema50?1:0;
+
+  // ── STRATEGY 4: RSI ──
+  var rsi=calcRSI(closes,14);
+  var rsiBias='neutral', rsiScore=0, rsiDiv=false;
+  if(rsi!==null){
+    if(rsi<30){rsiBias='bull';rsiScore++;}
+    else if(rsi>70){rsiBias='bear';rsiScore++;}
+    var prevRSI=calcRSI(closes.slice(0,-3),14);
+    if(prevRSI!==null){
+      var priceUp=closes[closes.length-1]>closes[closes.length-4];
+      var rsiUp=rsi>prevRSI;
+      if(priceUp&&!rsiUp&&rsi>50){rsiBias='bear';rsiScore+=2;rsiDiv=true;}
+      else if(!priceUp&&rsiUp&&rsi<50){rsiBias='bull';rsiScore+=2;rsiDiv=true;}
+    }
+  }
+
+  // ── STRATEGY 5: CANDLESTICK PATTERN ──
+  var pattern=detectCandlePattern(candles);
+  var patAtLevel=atSupport||atResist||inDemand||inSupply;
+  var patScore=patAtLevel?pattern.strength:Math.max(0,pattern.strength-1);
+  var patBias=pattern.bias;
+
+  // ── SCORE: need bull OR bear consensus ──
+  var bullScore=(srBias==='bull'?srScore:0)+(zoneBias==='bull'?zoneScore:0)+(emaBias==='bull'?emaScore:0)+(rsiBias==='bull'?rsiScore:0)+(patBias==='bull'?Math.min(patScore,3):0);
+  var bearScore=(srBias==='bear'?srScore:0)+(zoneBias==='bear'?zoneScore:0)+(emaBias==='bear'?emaScore:0)+(rsiBias==='bear'?rsiScore:0)+(patBias==='bear'?Math.min(patScore,3):0);
+
+  // Kill zone bonus
+  if(inPrimeKZ) { bullScore++;bearScore++; }
+  if(kzName==='SILVER_BULLET'){bullScore++;bearScore++;}
+
+  bull=bullScore>bearScore;
+  var finalScore=Math.max(bullScore,bearScore);
+
+  // MINIMUM: need 5+ score AND at least 2 strategies agreeing
+  if(finalScore<5) return;
+  var bullStrategies=[srBias==='bull',zoneBias==='bull',emaBias==='bull',rsiBias==='bull',patBias==='bull'&&patScore>=2].filter(Boolean).length;
+  var bearStrategies=[srBias==='bear',zoneBias==='bear',emaBias==='bear',rsiBias==='bear',patBias==='bear'&&patScore>=2].filter(Boolean).length;
+  var agreeCount=bull?bullStrategies:bearStrategies;
+  if(agreeCount<2) return; // need minimum 2 strategies aligned
+
+  // SL & TP with minimum pip guard
+  var obSize=Math.max(rng*0.18,0.40);
   var slDist=obSize+0.05;
-  var sl=bull?p-slDist:p+slDist;
-  var tp1=bull?p+(slDist*2.5):p-(slDist*2.5);
-  var tp2=bull?p+(slDist*4.5):p-(slDist*4.5);
+  // Use S/R level as TP target if available
+  var tp1Dist, tp2Dist;
+  if(bull&&nearRes&&(nearRes.price-p)>slDist*1.5){
+    tp1Dist=Math.min(nearRes.price-p, slDist*4);
+    tp2Dist=tp1Dist*1.8;
+  } else if(!bull&&nearSup&&(p-nearSup.price)>slDist*1.5){
+    tp1Dist=Math.min(p-nearSup.price, slDist*4);
+    tp2Dist=tp1Dist*1.8;
+  } else {
+    tp1Dist=slDist*2.5;
+    tp2Dist=slDist*4.5;
+  }
   var slPips=Math.round(slDist*100);
-  var tp1Pips=Math.round(Math.abs(tp1-p)*100);
+  var tp1Pips=Math.round(tp1Dist*100);
   var rr=tp1Pips/slPips;
-  // MINIMUM PIP GUARD: never fire signal with tiny targets
+  // Hard minimum pip guard
   if(slPips<30||tp1Pips<75) return;
+  if(rr<2.0) return;
 
-  var score=0;
-  if(inTradingKZ) score+=2;
-  if(strong) score++;
-  if(inGolden||inOTE) score+=2;
-  if(inShallow) score++;
-  if(judasSwept) score+=2;
-  if(volHigh) score++;
-  if(pdConfluence) score++;
-  if(nearPsych) score++;
-  if(!newsRisk) score++;
-  if(!overext) score++;
-  if(rr>=2.5) score++;
-  if(kzName==='SILVER_BULLET') score++;
-
-  // Lower thresholds: Silver Bullet 5, London/NY 5, other sessions 7
-  var minScore=kzName==='SILVER_BULLET'?5:inTradingKZ?5:7;
-  if(score<minScore) return;
-
-  // Deterministic dedup key: same conditions on both devices = same signal
+  // Dedup key
   var priceZone=Math.round(p/2)*2;
   var sigKey=todayIST+'_'+(bull?'B':'S')+'_'+priceZone;
-  if(allSigs.some(function(s){ return s.sigKey===sigKey; })) return;
+  if(allSigs.some(function(s){return s.sigKey===sigKey;})) return;
   if(lastSignalDir===(bull?'BUY':'SELL')&&Math.abs(p-lastSignalPrice)<rng*0.12) return;
 
   lastSignalDir=bull?'BUY':'SELL'; lastSignalPrice=p;
   if(bull) lastSigTimeBuy=now; else lastSigTimeSell=now;
   sigCount++;
-  todaySigCount=allSigs.filter(function(s){ return s.date===todayIST; }).length+1;
+  todaySigCount=allSigs.filter(function(s){return s.date===todayIST;}).length+1;
   set('sig-count-lbl',todaySigCount+' signal'+(todaySigCount!==1?'s':'')+' today');
 
-  var quality=score>=7?'A+':'A';
+  var quality=finalScore>=8?'A+':'A';
   var ist2=new Date(now+(5*60+30)*60000);
   var ts=String(ist2.getUTCHours()).padStart(2,'0')+':'+String(ist2.getUTCMinutes()).padStart(2,'0')+':'+String(ist2.getUTCSeconds()).padStart(2,'0')+' IST';
   var dir=bull?'BUY':'SELL';
-  var entry=parseFloat(fmt2(bull?p-obSize*0.4:p+obSize*0.4));
-  var slV=parseFloat(fmt2(sl)),tp1V=parseFloat(fmt2(tp1)),tp2V=parseFloat(fmt2(tp2));
-  var reasons=[];
-  if(inTradingKZ) reasons.push(sessionName+' KZ');
-  if(kzName==='SILVER_BULLET') reasons.push('⭐ Silver Bullet');
-  if(judasSwept) reasons.push('Judas Sweep ✓');
-  if(inGolden) reasons.push('★ Golden Pocket');
-  if(inOTE) reasons.push('★ OTE 70.5%');
-  if(inShallow) reasons.push('0.382 Retrace');
-  if(pdConfluence) reasons.push(bull?'Near PDL':'Near PDH');
-  if(nearPsych) reasons.push('Psych $'+psych);
-  if(volHigh) reasons.push('High vol');
-  if(!newsRisk) reasons.push('No news');
-  reasons.push('R:R '+rr.toFixed(1)+':1');
+  var entry=parseFloat(fmt2(p));
+  var sl=bull?parseFloat(fmt2(p-slDist)):parseFloat(fmt2(p+slDist));
+  var tp1=bull?parseFloat(fmt2(p+tp1Dist)):parseFloat(fmt2(p-tp1Dist));
+  var tp2=bull?parseFloat(fmt2(p+tp2Dist)):parseFloat(fmt2(p-tp2Dist));
 
-  var sig={id:now,sigKey:sigKey,date:todayIST,time:ts,dir:dir,quality:quality,score:score,
-    entry:entry,sl:slV,tp1:tp1V,tp2:tp2V,rr:parseFloat(rr.toFixed(1)),reasons:reasons,
-    dailyOpen:parseFloat(fmt2(o)),priceAtSignal:parseFloat(fmt2(p)),
-    inGolden:inGolden||inOTE,outcome:'open',closePrice:null,closedAt:null,pnlPips:null,
-    slPips:slPips,session:sessionName,judasSwept:judasSwept,kzName:kzName};
+  var reasons=[];
+  if(srBias===(bull?'bull':'bear')) reasons.push('S/R Level ✓');
+  if(zoneBias===(bull?'bull':'bear')) reasons.push(bull?'Demand Zone ✓':'Supply Zone ✓');
+  if(emaBias===(bull?'bull':'bear')) reasons.push(goldenCross?'Golden Cross ★':pullbackToEMA?'EMA Pullback ✓':'EMA Trend ✓');
+  if(rsiBias===(bull?'bull':'bear')) reasons.push(rsiDiv?'RSI Divergence ★':'RSI Zone ✓');
+  if(patBias===(bull?'bull':'bear')&&patScore>=2) reasons.push(pattern.name+' ✓');
+  if(inPrimeKZ) reasons.push(sessionName);
+  reasons.push('R:R '+rr.toFixed(1)+':1');
+  reasons.push('Score '+finalScore+'/12');
+
+  var sig={id:now,sigKey:sigKey,date:todayIST,time:ts,dir:dir,quality:quality,score:finalScore,
+    entry:entry,sl:sl,tp1:tp1,tp2:tp2,rr:parseFloat(rr.toFixed(1)),reasons:reasons,
+    dailyOpen:parseFloat(fmt2(o)),priceAtSignal:entry,inGolden:false,
+    outcome:'open',closePrice:null,closedAt:null,pnlPips:null,
+    slPips:slPips,session:sessionName,strategies:agreeCount+' strategies aligned'};
   allSigs.push(sig);
   saveSignals(allSigs);
   renderSignalPanels();
   playSound(quality==='A+'?'signal_ap':(bull?'signal_buy':'signal_sell'));
-  showNotif('signal',quality+' '+dir+' @ '+sessionName,dir+' '+entry+' · SL '+slPips+'p · R:R 1:'+rr.toFixed(1)+(judasSwept?' · Judas ✓':''));
+  showNotif('signal',quality+' '+dir+' — '+agreeCount+' Strategies',dir+' '+entry+' · SL '+slPips+'p · R:R 1:'+rr.toFixed(1)+' · '+reasons.slice(0,3).join(' · '));
 }
+
+
 // ─── XAU BACKTEST ENGINE ─────────────────────────
 function runBacktest(){
   var p=XAU.price; if(!p) return;
