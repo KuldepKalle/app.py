@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="War Room">
 <meta name="mobile-web-app-capable" content="yes">
-<title>AI Trading War Room v6.1</title>
+<title>AI Trading War Room v6.2</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -403,7 +403,7 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.1 · SMC · 4TF · XAUUSD · BTC</span></div>
+  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.2 · SMC · 4TF · XAUUSD · BTC</span></div>
   <div class="hr">
     <div class="pill live"><div class="pdot"></div><span id="feed-lbl">CONNECTING</span></div>
     <span class="pill" id="clk">--:--:-- IST</span>
@@ -535,6 +535,31 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
     <div class="tfc"><div class="tfh"><span class="tfn">30M — PLAN</span><span class="tfb" id="tf30" style="color:var(--amber)">WAIT</span></div><div class="tfd" id="tf30-d">Waiting...</div><div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-top:5px" id="tf30-l">---</div></div>
     <div class="tfc" style="border-color:rgba(240,192,64,.18)"><div class="tfh"><span class="tfn" style="color:var(--gold)">5M/1M — EXECUTE</span><span class="tfb" id="tf5" style="color:var(--amber)">WAIT</span></div><div class="tfd" id="tf5-d">Waiting...</div><div style="font-family:var(--mono);font-size:8px;color:var(--gold);margin-top:5px" id="tf5-l">---</div></div>
   </div>
+
+  <!-- SMC S/R LEVELS PANEL -->
+  <div class="card" style="margin-bottom:11px;border-color:rgba(96,165,250,.25)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+      <span style="font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:.08em">📊 SMC KEY LEVELS (1H CANDLES)</span>
+      <span id="sr-level-count" style="font-family:var(--mono);font-size:8px;color:var(--t3)">Calculating...</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="vs"><div class="vslbl">Nearest Resistance (BSL)</div><div class="vsval" style="color:var(--red)" id="sr-r1">---</div></div>
+      <div class="vs"><div class="vslbl">2nd Resistance</div><div class="vsval" style="color:var(--red);opacity:.7" id="sr-r2">---</div></div>
+      <div class="vs"><div class="vslbl">Nearest Support (SSL)</div><div class="vsval" style="color:var(--green)" id="sr-s1">---</div></div>
+      <div class="vs"><div class="vslbl">2nd Support</div><div class="vsval" style="color:var(--green);opacity:.7" id="sr-s2">---</div></div>
+      <div class="vs"><div class="vslbl">Bullish OB Zone</div><div class="vsval" style="color:var(--purple)" id="sr-ob-bull">---</div></div>
+      <div class="vs"><div class="vslbl">Bearish OB Zone</div><div class="vsval" style="color:var(--amber)" id="sr-ob-bear">---</div></div>
+      <div class="vs"><div class="vslbl">Fib 0.618 Level</div><div class="vsval" style="color:var(--gold)" id="sr-fib618">---</div></div>
+      <div class="vs"><div class="vslbl">OTE 70.5% Zone</div><div class="vsval" style="color:var(--gold)" id="sr-fib705">---</div></div>
+    </div>
+    <div style="padding:6px 10px;background:var(--bg3);border-radius:4px;font-family:var(--mono);font-size:9px">
+      <span style="color:var(--t3)">Price Zone: </span><span id="sr-zone-label" style="color:var(--gold)">Calculating...</span>
+      &nbsp;|&nbsp;
+      <span style="color:var(--t3)">Trade Bias: </span><span id="sr-trade-bias">---</span>
+    </div>
+  </div>
+
+
 
   <!-- ═══ SMC STRATEGY CONSENSUS ═══ -->
   <div class="stitle" style="color:var(--gold)">SMC Confluence — Multi-Timeframe</div>
@@ -1449,6 +1474,7 @@ function fetchXAU(){
     updateAgents();
     updateADR();
     updateKillZones();
+    updateSRLevels();
     checkForSignal();
     runBacktest();
     set('feed-lbl','LIVE · 1s · '+srcName);
@@ -1551,13 +1577,15 @@ function renderCandleVol(cid,candles,sym,curid,avgid,relid,sigid,infoid){
 
   var html='';
   candles.forEach(function(c,i){
-    var bull=c.c>=c.o;
+    var isBull=c.close>=c.open;  // use full field names for reliability
     var isCur=i===candles.length-1;
     var barH=Math.max(3,Math.round((c.vol/maxV)*80));
-    var cls='cbar '+(isCur?'cur':bull?'bull':'bear');
+    var cls='cbar '+(isCur?'cur':isBull?'bull':'bear');
     var isHighV=c.vol>avgV*1.5;
     var bdr=isHighV?'box-shadow:0 0 0 1px rgba(240,192,64,.5);':'';
-    var ist=new Date(c.t+(5*60+30)*60000);
+    // Floor to 30-min boundary before converting to IST
+    var tFloor=Math.floor(c.t/1800000)*1800000;
+    var ist=new Date(tFloor+19800000);
     var tStr=String(ist.getUTCHours()).padStart(2,'0')+':'+String(ist.getUTCMinutes()).padStart(2,'0');
     html+='<div class="ccol" title="'+tStr+' | Vol:'+fmtVol(c.vol)+' | O:'+c.o.toFixed(sym==='XAU'?2:0)+' C:'+c.c.toFixed(sym==='XAU'?2:0)+'">'+
       '<div class="'+cls+'" style="height:'+barH+'px;'+bdr+'"></div>'+
@@ -1673,7 +1701,20 @@ function fetchAllCandles(){
         else if(t.store==='4H') candles4H=parsed;
         else if(t.store==='D')  candlesD=parsed;
       }).catch(function(){
-        if(t.store==='30M') buildSimCandles('vol-candles','XAU','vs-cur','vs-avg','vs-rel','vs-sig','vol-info');
+        if(t.store==='30M'){
+          // Try futures endpoint as fallback
+          fetch('https://fapi.binance.com/fapi/v1/klines?symbol=XAUUSDT&interval='+t.tf+'&limit='+t.limit)
+            .then(function(r){return r.json();})
+            .then(function(d){
+              if(!Array.isArray(d)||!d.length) throw new Error();
+              var parsed=d.map(function(k){
+                var o=parseFloat(k[1]),h=parseFloat(k[2]),l=parseFloat(k[3]),cl=parseFloat(k[4]);
+                return{t:k[0],open:o,o:o,high:h,h:h,low:l,l:l,close:cl,c:cl,vol:parseFloat(k[5])};
+              });
+              candles30M=parsed;xauCandles=parsed;
+              renderCandleVol('vol-candles',parsed,'XAU','vs-cur','vs-avg','vs-rel','vs-sig','vol-info');
+            }).catch(function(){ buildSimCandles('vol-candles','XAU','vs-cur','vs-avg','vs-rel','vs-sig','vol-info'); });
+        }
       });
   });
 }
@@ -1682,139 +1723,152 @@ function fetchAllCandles(){
 function fetchXAUCandles(){ fetchAllCandles(); }
 
 // ─── SMC DETECTION: LIQUIDITY SWEEP ──────────────
+// ═══ SMC DETECTION v2 — ROBUST, ALWAYS PRODUCES OUTPUT ═══
+
+// ─── LIQUIDITY SWEEP ─────────────────────────────
 function detectLiquiditySweep(candles){
-  if(!candles||candles.length<10) return{swept:false,type:'none',level:0,dir:'neutral'};
+  var empty={swept:false,type:'none',dir:'neutral',bslLevel:null,sslLevel:null,bslTouches:0,sslTouches:0,score:0};
+  if(!candles||candles.length<6) return empty;
   var p=XAU.price||candles[candles.length-1].close;
+  if(!p||p<100) return empty;
   var n=candles.length;
-  var tol=p*0.002; // 0.2% tolerance for "equal" levels
+  var recent=candles.slice(-Math.min(30,n));
+  var tol=p*0.003; // 0.3% tolerance — generous for gold
 
-  // Find equal highs (Buy Side Liquidity - SSL above) and equal lows (Sell Side - BSL below)
-  var highs=candles.map(function(c){return c.high;});
-  var lows=candles.map(function(c){return c.low;});
+  var highs=recent.map(function(c){return c.high;});
+  var lows=recent.map(function(c){return c.low;});
+  var maxHigh=Math.max.apply(null,highs);
+  var minLow=Math.min.apply(null,lows);
 
-  // Find clusters of similar highs (potential BSL)
-  var bsl=null, sslLevel=null;
-  var maxHigh=Math.max.apply(null,highs.slice(-20));
-  var minLow=Math.min.apply(null,lows.slice(-20));
+  // Count touches within tolerance
+  var bslTouches=highs.filter(function(h){return Math.abs(h-maxHigh)<tol;}).length;
+  var sslTouches=lows.filter(function(l){return Math.abs(l-minLow)<tol;}).length;
 
-  // Count how many candles had highs near maxHigh
-  var bslTouches=highs.slice(-20).filter(function(h){return Math.abs(h-maxHigh)<tol;}).length;
-  var sslTouches=lows.slice(-20).filter(function(l){return Math.abs(l-minLow)<tol;}).length;
+  var bslLevel=bslTouches>=2?parseFloat(fmt2(maxHigh)):null;
+  var sslLevel=sslTouches>=2?parseFloat(fmt2(minLow)):null;
 
-  var bslLevel=bslTouches>=2?maxHigh:null;
-  var sslLevel2=sslTouches>=2?minLow:null;
+  // Sweep: last candle's wick exceeded level but body closed back inside
+  var lastC=candles[n-1], prevC=candles[n-2]||lastC;
+  var sweptBSL=bslLevel&&(lastC.high>bslLevel*1.0005)&&(lastC.close<bslLevel*1.001);
+  var sweptSSL=sslLevel&&(lastC.low<sslLevel*0.9995)&&(lastC.close>sslLevel*0.999);
 
-  // Detect actual sweep: price went beyond level then came back inside
-  var lastC=candles[n-1],prevC=candles[n-2];
-  var sweptBSL=bslLevel&&prevC.high>bslLevel&&lastC.close<bslLevel; // swept high then closed below
-  var sweptSSL=sslLevel2&&prevC.low<sslLevel2&&lastC.close>sslLevel2; // swept low then closed above
+  // Also detect if PREVIOUS candle swept and current is reversal confirmation
+  var prevSweptBSL=bslLevel&&(prevC.high>bslLevel)&&(lastC.close<bslLevel);
+  var prevSweptSSL=sslLevel&&(prevC.low<sslLevel)&&(lastC.close>sslLevel);
+  var actualSweep=(sweptBSL||prevSweptBSL||sweptSSL||prevSweptSSL);
+  var sweepDir=sweptBSL||prevSweptBSL?'bear':sweptSSL||prevSweptSSL?'bull':'neutral';
 
-  var swept=sweptBSL||sweptSSL;
-  var type=sweptBSL?'BSL_SWEPT':sweptSSL?'SSL_SWEPT':'NONE';
-  var dir=sweptBSL?'bear':sweptSSL?'bull':'neutral'; // after BSL sweep → expect drop; after SSL sweep → expect rise
+  // Near level (approaching) = partial score
+  var nearBSL=bslLevel&&Math.abs(p-bslLevel)<tol*3&&!actualSweep;
+  var nearSSL=sslLevel&&Math.abs(p-sslLevel)<tol*3&&!actualSweep;
 
   return{
-    swept:swept,type:type,dir:dir,
-    bslLevel:bslLevel?parseFloat(fmt2(bslLevel)):null,
-    sslLevel:sslLevel2?parseFloat(fmt2(sslLevel2)):null,
+    swept:actualSweep,type:sweptBSL||prevSweptBSL?'BSL_SWEPT':sweptSSL||prevSweptSSL?'SSL_SWEPT':'NONE',
+    dir:sweepDir,bslLevel:bslLevel,sslLevel:sslLevel,
     bslTouches:bslTouches,sslTouches:sslTouches,
-    score:swept?3:bslLevel&&Math.abs(p-bslLevel)<tol*2?1:sslLevel2&&Math.abs(p-sslLevel2)<tol*2?1:0
+    nearBSL:nearBSL,nearSSL:nearSSL,
+    score:actualSweep?3:nearBSL||nearSSL?1:0
   };
 }
 
-// ─── SMC DETECTION: ORDER BLOCKS + FVG ───────────
+// ─── ORDER BLOCKS + FVG ──────────────────────────
 function detectOrderBlocks(candles){
-  if(!candles||candles.length<8) return{bullOB:null,bearOB:null,inOB:false,fvg:false,fvgDir:'none',score:0};
+  var empty={bullOB:null,bearOB:null,inOB:false,inBullOB:false,inBearOB:false,obDir:'neutral',fvg:false,fvgDir:'none',fvgTop:0,fvgBottom:0,score:0};
+  if(!candles||candles.length<6) return empty;
   var p=XAU.price||candles[candles.length-1].close;
+  if(!p||p<100) return empty;
   var n=candles.length;
-  var tol=p*0.003;
 
-  // Order Block = last opposing candle before a significant move
-  // Bullish OB: last bearish candle before a strong bullish move up
-  // Bearish OB: last bullish candle before a strong bearish move down
   var bullOB=null, bearOB=null;
+  // Search last 20 candles for OBs
+  var lookback=Math.min(20,n-2);
+  for(var i=n-2;i>=n-lookback;i--){
+    var prev=candles[i], curr=candles[i+1];
+    if(!prev||!curr) continue;
+    var pbody=Math.abs(prev.close-prev.open);
+    var cbody=Math.abs(curr.close-curr.open);
+    if(pbody<0.5||cbody<0.5) continue; // skip doji
 
-  for(var i=n-4;i>=Math.max(0,n-15);i--){
-    var c=candles[i];
-    var isBear=c.close<c.open;
-    var isBull=c.close>c.open;
-    var body=Math.abs(c.close-c.open);
-    var range=c.high-c.low;
-
-    // Check if followed by strong move in opposite direction
-    var nextHigh=Math.max.apply(null,candles.slice(i+1,Math.min(i+4,n)).map(function(x){return x.high;}));
-    var nextLow=Math.min.apply(null,candles.slice(i+1,Math.min(i+4,n)).map(function(x){return x.low;}));
-    var moveUp=(nextHigh-c.high)>(range*1.5);
-    var moveDown=(c.low-nextLow)>(range*1.5);
-
-    if(isBear&&moveUp&&!bullOB){
-      bullOB={top:Math.max(c.open,c.close),bottom:Math.min(c.open,c.close),
-        mid:(c.open+c.close)/2,idx:i};
+    // Bullish OB: bearish candle followed by strong bullish candle
+    var prevBear=prev.close<prev.open;
+    var currBull=curr.close>curr.open;
+    var strongBull=(curr.close-curr.open)>(prev.open-prev.close)*0.8;
+    if(prevBear&&currBull&&strongBull&&!bullOB){
+      bullOB={top:parseFloat(fmt2(Math.max(prev.open,prev.close))),
+              bottom:parseFloat(fmt2(Math.min(prev.open,prev.close))),
+              mid:parseFloat(fmt2((prev.open+prev.close)/2)),idx:i};
     }
-    if(isBull&&moveDown&&!bearOB){
-      bearOB={top:Math.max(c.open,c.close),bottom:Math.min(c.open,c.close),
-        mid:(c.open+c.close)/2,idx:i};
+    // Bearish OB: bullish candle followed by strong bearish candle
+    var prevBull=prev.close>prev.open;
+    var currBear=curr.close<curr.open;
+    var strongBear=(prev.close-prev.open)*0.8<(curr.open-curr.close);
+    if(prevBull&&currBear&&strongBear&&!bearOB){
+      bearOB={top:parseFloat(fmt2(Math.max(prev.open,prev.close))),
+              bottom:parseFloat(fmt2(Math.min(prev.open,prev.close))),
+              mid:parseFloat(fmt2((prev.open+prev.close)/2)),idx:i};
     }
     if(bullOB&&bearOB) break;
   }
 
-  // Fair Value Gap: 3-candle imbalance
-  // Candle 1 high < Candle 3 low = bullish FVG
-  // Candle 1 low > Candle 3 high = bearish FVG
+  // FVG: 3-candle imbalance (gap between candle 1 high and candle 3 low)
   var fvg=false, fvgDir='none', fvgTop=0, fvgBottom=0;
   if(n>=3){
-    var c1=candles[n-3],c2=candles[n-2],c3=candles[n-1];
-    if(c1.high<c3.low){fvg=true;fvgDir='bull';fvgBottom=c1.high;fvgTop=c3.low;}
-    else if(c1.low>c3.high){fvg=true;fvgDir='bear';fvgTop=c1.low;fvgBottom=c3.high;}
+    var c1=candles[n-3],c3=candles[n-1];
+    if(c1&&c3){
+      if(c1.high<c3.low-0.5){fvg=true;fvgDir='bull';fvgBottom=c1.high;fvgTop=c3.low;}
+      else if(c1.low>c3.high+0.5){fvg=true;fvgDir='bear';fvgTop=c1.low;fvgBottom=c3.high;}
+    }
   }
 
-  var inBullOB=bullOB&&p>=bullOB.bottom&&p<=bullOB.top*1.002;
-  var inBearOB=bearOB&&p<=bearOB.top&&p>=bearOB.bottom*0.998;
+  var tol=p*0.003;
+  var inBullOB=!!(bullOB&&p>=bullOB.bottom-tol&&p<=bullOB.top+tol);
+  var inBearOB=!!(bearOB&&p>=bearOB.bottom-tol&&p<=bearOB.top+tol);
   var inOB=inBullOB||inBearOB;
   var obDir=inBullOB?'bull':inBearOB?'bear':'neutral';
 
+  // Near OB counts too
+  var nearBullOB=!inBullOB&&bullOB&&Math.abs(p-bullOB.mid)<tol*3;
+  var nearBearOB=!inBearOB&&bearOB&&Math.abs(p-bearOB.mid)<tol*3;
+
   return{
-    bullOB:bullOB,bearOB:bearOB,
-    inOB:inOB,obDir:obDir,inBullOB:inBullOB,inBearOB:inBearOB,
+    bullOB:bullOB,bearOB:bearOB,inOB:inOB,obDir:obDir,
+    inBullOB:inBullOB,inBearOB:inBearOB,
+    nearBullOB:nearBullOB,nearBearOB:nearBearOB,
     fvg:fvg,fvgDir:fvgDir,fvgTop:fvgTop,fvgBottom:fvgBottom,
-    score:(inOB?2:0)+(fvg?1:0)
+    score:(inOB?2:nearBullOB||nearBearOB?1:0)+(fvg?1:0)
   };
 }
 
-// ─── SMC DETECTION: FIBONACCI ────────────────────
+// ─── FIBONACCI ───────────────────────────────────
 function detectFibLevels(candles){
-  if(!candles||candles.length<5) return{atLevel:false,level:'none',score:0};
+  var empty={atLevel:false,isOTE:false,hitFib:null,bias:'neutral',swingHigh:0,swingLow:0,fib618:0,fib705:0,fib382:0,score:0};
+  if(!candles||candles.length<5) return empty;
   var p=XAU.price||candles[candles.length-1].close;
-  var n=candles.length;
-  var lookback=Math.min(30,n);
-  var recent=candles.slice(-lookback);
-
+  if(!p||p<100) return empty;
+  var recent=candles.slice(-Math.min(40,candles.length));
   var swingHigh=Math.max.apply(null,recent.map(function(c){return c.high;}));
   var swingLow=Math.min.apply(null,recent.map(function(c){return c.low;}));
   var range=swingHigh-swingLow;
-  if(range<1) return{atLevel:false,level:'none',score:0};
+  if(range<2) return empty;
 
-  var tol=range*0.015; // 1.5% of range = tolerance
-
-  // Key Fibonacci levels (both directions)
+  var tol=range*0.02; // 2% of range tolerance — generous
   var fibs=[
-    {label:'0.236',val:swingHigh-range*0.236},
-    {label:'0.382',val:swingHigh-range*0.382},
-    {label:'0.500',val:swingHigh-range*0.500},
-    {label:'0.618',val:swingHigh-range*0.618},
-    {label:'0.705 OTE',val:swingHigh-range*0.705},
-    {label:'0.786',val:swingHigh-range*0.786},
+    {label:'0.236',val:swingHigh-range*0.236,strength:1},
+    {label:'0.382',val:swingHigh-range*0.382,strength:1},
+    {label:'0.500',val:swingHigh-range*0.500,strength:1},
+    {label:'0.618 ★',val:swingHigh-range*0.618,strength:2},
+    {label:'OTE 70.5%',val:swingHigh-range*0.705,strength:3},
+    {label:'0.786',val:swingHigh-range*0.786,strength:1},
   ];
 
   var hitFib=null;
-  fibs.forEach(function(f){
-    if(Math.abs(p-f.val)<tol&&!hitFib) hitFib=f;
-  });
+  for(var i=0;i<fibs.length;i++){
+    if(Math.abs(p-fibs[i].val)<tol){hitFib=fibs[i];break;}
+  }
 
-  // Determine bias from context: above midpoint = bearish retrace (sell), below = bullish retrace (buy)
+  // Bias: if price is in lower half of range = bullish retrace, upper half = bearish
   var midpoint=(swingHigh+swingLow)/2;
-  var lastClose=candles[n-1].close;
-  var bias=lastClose<midpoint?'bull':'bear'; // if below mid, likely bullish retrace
+  var bias=p<midpoint?'bull':'bear';
 
   return{
     swingHigh:parseFloat(fmt2(swingHigh)),
@@ -1824,50 +1878,51 @@ function detectFibLevels(candles){
     fib382:parseFloat(fmt2(swingHigh-range*0.382)),
     hitFib:hitFib,bias:bias,
     atLevel:!!hitFib,
-    isOTE:hitFib&&(hitFib.label==='0.618'||hitFib.label==='0.705 OTE'),
-    score:hitFib?(hitFib.label.includes('OTE')||hitFib.label==='0.618')?2:1:0
+    isOTE:!!(hitFib&&(hitFib.label==='OTE 70.5%'||hitFib.label==='0.618 ★')),
+    score:hitFib?hitFib.strength:0
   };
 }
 
-// ─── SMC DETECTION: EMA TREND STACK ──────────────
+// ─── EMA TREND STACK ─────────────────────────────
 function detectEMATrend(candles){
-  if(!candles||candles.length<21) return{bias:'neutral',score:0,stack:false};
+  var empty={bias:'neutral',score:0,bullStack:false,bearStack:false,ema8:null,ema21:null,ema50:null,ema200:null,pullbackToEMA21:false,goldenCross:false,deathCross:false};
+  if(!candles||candles.length<10) return empty;
   var closes=candles.map(function(c){return c.close;});
   var p=closes[closes.length-1];
-  var ema8=calcEMA(closes,8);
-  var ema21=calcEMA(closes,21);
+  var ema8=closes.length>=8?calcEMA(closes,8):null;
+  var ema21=closes.length>=21?calcEMA(closes,21):null;
   var ema50=closes.length>=50?calcEMA(closes,50):null;
   var ema200=closes.length>=200?calcEMA(closes,200):null;
 
-  // Bull stack: price > ema8 > ema21 > ema50
-  var bullStack=ema8&&ema21&&p>ema8&&ema8>ema21;
-  if(ema50) bullStack=bullStack&&ema21>ema50;
-  // Bear stack: price < ema8 < ema21 < ema50
-  var bearStack=ema8&&ema21&&p<ema8&&ema8<ema21;
-  if(ema50) bearStack=bearStack&&ema21<ema50;
+  if(!ema8||!ema21) return empty;
 
-  // Golden/Death cross on 50/200
+  var bullStack=p>ema8&&ema8>ema21&&(ema50?ema21>ema50:true);
+  var bearStack=p<ema8&&ema8<ema21&&(ema50?ema21<ema50:true);
+
   var prevCloses=closes.slice(0,-1);
   var prevEma50=prevCloses.length>=50?calcEMA(prevCloses,50):null;
   var prevEma200=prevCloses.length>=200?calcEMA(prevCloses,200):null;
-  var goldenCross=ema50&&ema200&&prevEma50&&prevEma200&&ema50>ema200&&prevEma50<=prevEma200;
-  var deathCross=ema50&&ema200&&prevEma50&&prevEma200&&ema50<ema200&&prevEma50>=prevEma200;
+  var goldenCross=!!(ema50&&ema200&&prevEma50&&prevEma200&&ema50>ema200&&prevEma50<=prevEma200);
+  var deathCross=!!(ema50&&ema200&&prevEma50&&prevEma200&&ema50<ema200&&prevEma50>=prevEma200);
+  var pullbackToEMA21=!!(ema21&&Math.abs(p-ema21)<p*0.003);
 
-  // Pullback to EMA21 (best entry)
-  var pullbackToEMA21=ema21&&Math.abs(p-ema21)<p*0.002;
-
-  var bias=bullStack||goldenCross?'bull':bearStack||deathCross?'bear':'neutral';
-  var score=(bullStack||bearStack?2:ema21&&((bias==='bull'&&p>ema21)||(bias==='bear'&&p<ema21))?1:0)
+  var bias=bullStack||goldenCross?'bull':bearStack||deathCross?'bear':
+           p>ema21&&ema21?'bull':p<ema21&&ema21?'bear':'neutral';
+  var score=(bullStack||bearStack?2:p>ema21&&ema21?1:p<ema21&&ema21?1:0)
            +(pullbackToEMA21?1:0)+(goldenCross||deathCross?1:0);
 
   return{bias:bias,bullStack:bullStack,bearStack:bearStack,
-    ema8:ema8,ema21:ema21,ema50:ema50,ema200:ema200,
+    ema8:ema8?parseFloat(fmt2(ema8)):null,
+    ema21:ema21?parseFloat(fmt2(ema21)):null,
+    ema50:ema50?parseFloat(fmt2(ema50)):null,
+    ema200:ema200?parseFloat(fmt2(ema200)):null,
     goldenCross:goldenCross,deathCross:deathCross,
     pullbackToEMA21:pullbackToEMA21,
-    score:Math.min(score,3)};
+    score:Math.min(score,4)};
 }
 
-// ─── MULTI-TF BIAS ────────────────────────────────
+
+
 function getMTFBias(){
   function tfBias(candles){
     if(!candles||candles.length<3) return 'neutral';
@@ -1889,12 +1944,23 @@ function getMTFBias(){
 // ─── UPDATE AGENTS (SMC) ─────────────────────────
 function updateAgents(){
   var p=XAU.price; if(!p) return;
-  // Use 1H candles as primary for agent analysis (better data than 30M)
-  var c1h=candles1H.length>=10?candles1H:candles30M;
-  var c30=candles30M;
+  var o=XAU.dailyOpen||p;
+  // Use best available candle set — prefer 1H, fallback to 30M, fallback to price-only
+  var c1h=candles1H.length>=10?candles1H:(candles30M.length>=10?candles30M:null);
+  var c30=candles30M.length>=5?candles30M:null;
 
   if(!c1h||c1h.length<5){
-    ['ag-sweep','ag-ob','ag-ict','ag-fib2','ag-ema2','ag-risk'].forEach(function(id){setSig(id,'sw','Loading candles...');});
+    // Price-only fallback: show basic bias from daily open while candles load
+    var bull=p>o;
+    var rng=XAU.high-XAU.low||20;
+    var chgPct=o>0?((p-o)/o*100):0;
+    ['ag-sweep','ag-ob','ag-ict','ag-fib2','ag-ema2'].forEach(function(id){
+      setSig(id,'sw','Loading 1H/4H candles... (~30s)');
+    });
+    setSig('ag-risk','sw','Price vs Daily Open: '+(bull?'+':'')+fmt2(p-o)+' pips ('+(chgPct>=0?'+':'')+chgPct.toFixed(2)+'%) · Candles loading...');
+    setTag('mtf-d',bull?'tb':'ts2','D: '+(bull?'▲':'▼'));
+    setTag('mtf-4h','tw','4H: ...');setTag('mtf-1h','tw','1H: ...');setTag('mtf-30','tw','30M: ...');
+    setTag('mtf-align','tw','LOADING');
     return;
   }
 
@@ -1994,8 +2060,8 @@ function updateAgents(){
   // ─── AGENT 5: EMA TREND ──────────────────────────
   var ema=detectEMATrend(c1h);
   var emaBias=ema.bias;
-  set('ema2-fast',(ema.ema8?fmt2(ema.ema8):'--')+' / '+(ema.ema21?fmt2(ema.ema21):'--'));
-  set('ema2-slow',(ema.ema50?fmt2(ema.ema50):'--')+' / '+(ema.ema200?fmt2(ema.ema200):'--'));
+  set('ema2-fast',(ema.ema8?fmt2(ema.ema8):'Wait')+'  /  '+(ema.ema21?fmt2(ema.ema21):'Wait'));
+  set('ema2-slow',(ema.ema50?fmt2(ema.ema50):'Need 50 bars')+'  /  '+(ema.ema200?fmt2(ema.ema200):'Need 200 bars'));
   setTag('ema2-stack',ema.bullStack?'tb':ema.bearStack?'ts2':'tw',
     ema.bullStack?'BULL STACK ✓':ema.bearStack?'BEAR STACK ✓':ema.goldenCross?'GOLDEN CROSS★':ema.deathCross?'DEATH CROSS★':'NO STACK');
   setTag('ema2-pb',ema.pullbackToEMA21?'tb':'tw',
@@ -2017,7 +2083,8 @@ function updateAgents(){
   if(cb) cb.style.width=(buyCount/5*100)+'%';
   if(cw) cw.style.width=(Math.max(0,1-buyCount/5-sellCount/5)*100)+'%';
   if(cs) cs.style.width=(sellCount/5*100)+'%';
-  set('cons-text',buyCount+' BUY · '+sellCount+' SELL · '+(5-buyCount-sellCount)+' WAIT — '+(mtfAlign?(mtfBull?'All TFs BULLISH ▲':'All TFs BEARISH ▼'):'Mixed TF bias'));
+  var priceVsOpen=p>o?'Price ABOVE daily open ('+fmt2(p-o)+' pips)':'Price BELOW daily open ('+fmt2(o-p)+' pips)';
+  set('cons-text',buyCount+' BUY · '+sellCount+' SELL · '+(5-buyCount-sellCount)+' NEUTRAL — '+priceVsOpen);
   set('cons-score',totalScore);
   set('cons-grade',totalScore+'/10');
   var scoreEl=gel('cons-score');
@@ -2558,6 +2625,59 @@ function updateKillZones() {
            : kzName === 'LONDON_CLOSE' ? 'London Close (7:30–9:30PM IST) — position squaring, late reversals only'
            : 'Off-Hours — prepare for next session, review plan';
   set('kz-po3', po3);
+}
+
+
+// ─── UPDATE SMC S/R LEVELS PANEL ─────────────────
+function updateSRLevels(){
+  var p=XAU.price; if(!p||p<100) return;
+  var candles=candles1H.length>=10?candles1H:(candles30M.length>=10?candles30M:null);
+  if(!candles||candles.length<5){ set('sr-level-count','Waiting for candles...'); return; }
+  var tol=p*0.003, n=candles.length;
+  var levels=[];
+  for(var i=2;i<n-2;i++){
+    if(candles[i].high>candles[i-1].high&&candles[i].high>candles[i-2].high&&
+       candles[i].high>candles[i+1].high&&candles[i].high>candles[i+2].high){
+      var lh=parseFloat(fmt2(candles[i].high));
+      if(!levels.some(function(l){return Math.abs(l.price-lh)<tol&&l.type==='res';}))
+        levels.push({price:lh,type:'res',touches:1});
+    }
+    if(candles[i].low<candles[i-1].low&&candles[i].low<candles[i-2].low&&
+       candles[i].low<candles[i+1].low&&candles[i].low<candles[i+2].low){
+      var ll=parseFloat(fmt2(candles[i].low));
+      if(!levels.some(function(l){return Math.abs(l.price-ll)<tol&&l.type==='sup';}))
+        levels.push({price:ll,type:'sup',touches:1});
+    }
+  }
+  levels.forEach(function(lv){
+    candles.forEach(function(cc){
+      if(Math.abs(cc.high-lv.price)<tol||Math.abs(cc.low-lv.price)<tol) lv.touches++;
+    });
+  });
+  var ress=levels.filter(function(l){return l.type==='res'&&l.price>p;}).sort(function(a,b){return a.price-b.price;});
+  var sups=levels.filter(function(l){return l.type==='sup'&&l.price<p;}).sort(function(a,b){return b.price-a.price;});
+  if(!ress.length) ress=[{price:parseFloat(fmt2(XAU.high||p+15)),type:'res',touches:1}];
+  if(!sups.length) sups=[{price:parseFloat(fmt2(XAU.low||p-15)),type:'sup',touches:1}];
+  set('sr-r1',fmt2(ress[0].price)+' ('+ress[0].touches+'×)');
+  set('sr-r2',ress[1]?fmt2(ress[1].price)+' ('+ress[1].touches+'×)':'---');
+  set('sr-s1',fmt2(sups[0].price)+' ('+sups[0].touches+'×)');
+  set('sr-s2',sups[1]?fmt2(sups[1].price)+' ('+sups[1].touches+'×)':'---');
+  var ob=detectOrderBlocks(candles);
+  set('sr-ob-bull',ob.bullOB?fmt2(ob.bullOB.bottom)+'–'+fmt2(ob.bullOB.top):'Scanning...');
+  set('sr-ob-bear',ob.bearOB?fmt2(ob.bearOB.bottom)+'–'+fmt2(ob.bearOB.top):'Scanning...');
+  var fib=detectFibLevels(candles);
+  set('sr-fib618',fib.fib618?fmt2(fib.fib618)+(Math.abs(p-fib.fib618)<p*0.004?' ← PRICE':''):'---');
+  set('sr-fib705',fib.fib705?fmt2(fib.fib705)+(Math.abs(p-fib.fib705)<p*0.005?' ← OTE PRICE':''):'---');
+  var nearRes=ress[0]&&Math.abs(p-ress[0].price)<p*0.005;
+  var nearSup=sups[0]&&Math.abs(p-sups[0].price)<p*0.005;
+  var pctFromSup=ress[0]&&sups[0]?Math.round((p-sups[0].price)/(ress[0].price-sups[0].price)*100):50;
+  var zoneLabel=nearRes?'⚠ AT RESISTANCE — Watch SELL':nearSup?'⚠ AT SUPPORT — Watch BUY':'Mid-range ('+pctFromSup+'% from support)';
+  set('sr-zone-label',zoneLabel);
+  var zEl=gel('sr-zone-label'); if(zEl) zEl.style.color=nearRes?'var(--red)':nearSup?'var(--green)':'var(--amber)';
+  var bull=p>(XAU.dailyOpen||p);
+  var bEl=gel('sr-trade-bias');
+  if(bEl){bEl.textContent=bull?'▲ BULL BIAS — Buy dips to Support/OB':'▼ BEAR BIAS — Sell rallies to Resistance/OB';bEl.style.color=bull?'var(--green)':'var(--red)';}
+  set('sr-level-count',levels.length+' swing levels · '+ress.length+' res · '+sups.length+' sup');
 }
 
 function updatePDHPDL() {
