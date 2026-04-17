@@ -1519,7 +1519,8 @@ function fetchBTCCandles(){
 
 function parseCandles(data, sym){
   var candles = data.map(function(k){
-    return{ t:k[0], o:parseFloat(k[1]), h:parseFloat(k[2]), l:parseFloat(k[3]), c:parseFloat(k[4]), vol:parseFloat(k[5]) };
+    var o=parseFloat(k[1]),h=parseFloat(k[2]),l=parseFloat(k[3]),cl=parseFloat(k[4]);
+    return{t:k[0],o:o,h:h,l:l,c:cl,open:o,high:h,low:l,close:cl,vol:parseFloat(k[5])};
   });
   if(sym==='xau'){
     xauCandles = candles;
@@ -1573,7 +1574,11 @@ function buildSimCandles(cid,sym,curid,avgid,relid,sigid,infoid){
   var simC=[];
   var baseV=sym==='XAU'?8000:50000;
   for(var i=19;i>=0;i--){
-    simC.push({t:Date.now()-i*30*60*1000,o:0,h:0,l:0,c:0,vol:baseV*(0.6+Math.random()*.9)});
+    var bv=baseV*(0.6+Math.random()*.9);
+    var bp=(sym==='XAU'?XAU.price:BTC.price)||4600;
+    var bh=bp+bp*0.002*Math.random(),bl=bp-bp*0.002*Math.random();
+    simC.push({t:Date.now()-i*30*60*1000,
+      open:bp,o:bp,high:bh,h:bh,low:bl,l:bl,close:bp,c:bp,vol:bv});
   }
   renderCandleVol(cid,simC,sym,curid,avgid,relid,sigid,infoid);
   if(infoid) set(infoid,'Simulated (Binance unavailable — CORS). Deploy to Netlify for real data.');
@@ -3333,6 +3338,7 @@ document.addEventListener('visibilitychange', function(){
     if(!wakeLock) requestWakeLock();
   }
 });
+
 </script>
 </body>
 </html>
