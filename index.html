@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="War Room">
 <meta name="mobile-web-app-capable" content="yes">
-<title>AI Trading War Room v6.2</title>
+<title>AI Trading War Room v6.3</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -403,7 +403,7 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.2 · SMC · 4TF · XAUUSD · BTC</span></div>
+  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.3 · SMC · 4TF · XAUUSD+BTC</span></div>
   <div class="hr">
     <div class="pill live"><div class="pdot"></div><span id="feed-lbl">CONNECTING</span></div>
     <span class="pill" id="clk">--:--:-- IST</span>
@@ -715,29 +715,133 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
       <div class="vs"><div class="vslbl">Vol Signal</div><div class="vsval" id="btc-vs-sig" style="color:var(--amber)">---</div></div>
     </div>
   </div>
-  <div class="stitle">BTC Consensus</div>
-  <div class="card">
+  <div class="stitle" style="color:var(--blue)">BTC SMC Confluence</div>
+  <div class="card" style="margin-bottom:10px;border-color:rgba(96,165,250,.25)">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px">
+      <div style="font-family:var(--mono);font-size:8px;color:var(--t3)">TREND:</div>
+      <span id="btc-mtf-d"  class="tag tw" style="font-size:8px">D: ---</span>
+      <span id="btc-mtf-4h" class="tag tw" style="font-size:8px">4H: ---</span>
+      <span id="btc-mtf-1h" class="tag tw" style="font-size:8px">1H: ---</span>
+      <span id="btc-mtf-30" class="tag tw" style="font-size:8px">30M: ---</span>
+      <span id="btc-mtf-align" class="tag tw" style="font-size:8px;margin-left:4px">ALIGN: ---</span>
+    </div>
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:11px;flex-wrap:wrap">
-      <div style="flex:1;min-width:200px">
+      <div style="flex:1;min-width:180px">
         <div class="votes">
-          <div class="vc"><div class="vb wait" id="bv-anna">WAIT</div><div class="vn">Anna</div></div>
-          <div class="vc"><div class="vb wait" id="bv-raj">WAIT</div><div class="vn">Raj</div></div>
-          <div class="vc"><div class="vb wait" id="bv-max">WAIT</div><div class="vn">Max</div></div>
-          <div class="vc"><div class="vb wait" id="bv-zoe">WAIT</div><div class="vn">Zoe</div></div>
-          <div class="vc"><div class="vb wait" id="bv-fib">WAIT</div><div class="vn">Fib</div></div>
+          <div class="vc"><div class="vb wait" id="btc-v-sweep">WAIT</div><div class="vn">Sweep</div></div>
+          <div class="vc"><div class="vb wait" id="btc-v-ob">WAIT</div><div class="vn">OB</div></div>
+          <div class="vc"><div class="vb wait" id="btc-v-fib">WAIT</div><div class="vn">Fib</div></div>
+          <div class="vc"><div class="vb wait" id="btc-v-ema">WAIT</div><div class="vn">EMA</div></div>
+          <div class="vc"><div class="vb wait" id="btc-v-vol">WAIT</div><div class="vn">Vol</div></div>
         </div>
-        <div class="cbar2"><div class="cbuy" id="bcb-b" style="width:0%"></div><div class="cwait" id="bcb-w" style="width:100%"></div><div class="csell" id="bcb-s" style="width:0%"></div></div>
-        <div style="font-family:var(--mono);font-size:8px;color:var(--t3)" id="bcons">Waiting...</div>
+        <div class="cbar2"><div class="cbuy" id="btc-cb-b" style="width:0%"></div><div class="cwait" id="btc-cb-w" style="width:100%"></div><div class="csell" id="btc-cb-s" style="width:0%"></div></div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-top:5px" id="btc-cons-text">Loading BTC analysis...</div>
       </div>
-      <div style="text-align:right;min-width:80px"><div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-bottom:2px">VERDICT</div><div style="font-family:var(--mono);font-size:24px;font-weight:700" id="bverdict">---</div></div>
+      <div style="text-align:right;min-width:80px">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--t3)">SMC SCORE</div>
+        <div style="font-family:var(--mono);font-size:26px;font-weight:700;line-height:1" id="btc-cons-score">--</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--t3)" id="btc-cons-grade">--/10</div>
+      </div>
     </div>
   </div>
-  <div class="stitle">BTC Agents</div>
-  <div class="g3">
-    <div class="ag"><div class="ag-tf">1H+30M</div><div class="ag-h"><div class="av" style="background:rgba(34,197,94,.1);color:var(--green)">AN</div><div><div class="an">Anna</div><div class="ar">TREND · EMA</div></div></div><div class="sig sw" id="btc-anna">Waiting...</div><div class="rw"><span class="rl">1H Trend</span><span class="rv" id="btc-trend">---</span></div><div class="rw"><span class="rl">30M OB</span><span class="rv" id="btc-ob2">---</span></div><div class="rw"><span class="rl">Entry</span><span class="rv" id="btc-ent">---</span></div></div>
-    <div class="ag"><div class="ag-tf">30M+5M</div><div class="ag-h"><div class="av" style="background:rgba(96,165,250,.1);color:var(--blue)">RJ</div><div><div class="an">Raj</div><div class="ar">SMC · OB</div></div></div><div class="sig sw" id="btc-raj">Waiting...</div><div class="rw"><span class="rl">OB Zone</span><span class="rv" id="btc-ob">---</span></div><div class="rw"><span class="rl">TP Target</span><span class="rv" id="btc-tp">---</span></div><div class="rw"><span class="rl">Stop Loss</span><span class="rv" style="color:var(--red)" id="btc-sl">---</span></div></div>
-    <div class="ag" style="border-color:rgba(240,192,64,.18)"><div class="ag-tf">30M H/L</div><div class="ag-h"><div class="av" style="background:rgba(240,192,64,.1);color:var(--gold)">FB</div><div><div class="an">Fib</div><div class="ar">FIBONACCI</div></div></div><div class="sig sw" id="btc-fib">Waiting...</div><div class="rw"><span class="rl">0.618</span><span class="rv" style="color:var(--gold)" id="btc-618">---</span></div><div class="rw"><span class="rl">0.786</span><span class="rv" id="btc-786">---</span></div><div class="rw"><span class="rl">Signal</span><span id="btc-ftag" class="tag tw">WAIT</span></div></div>
+
+  <!-- BTC SMC S/R LEVELS PANEL -->
+  <div class="card" style="margin-bottom:10px;border-color:rgba(96,165,250,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:5px">
+      <span style="font-family:var(--mono);font-size:9px;color:var(--blue)">📊 BTC SMC KEY LEVELS</span>
+      <span id="btc-sr-count" style="font-family:var(--mono);font-size:8px;color:var(--t3)">Loading...</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="vs"><div class="vslbl">Nearest Resistance</div><div class="vsval" style="color:var(--red)" id="btc-sr-r1">---</div></div>
+      <div class="vs"><div class="vslbl">2nd Resistance</div><div class="vsval" style="color:var(--red);opacity:.7" id="btc-sr-r2">---</div></div>
+      <div class="vs"><div class="vslbl">Nearest Support</div><div class="vsval" style="color:var(--green)" id="btc-sr-s1">---</div></div>
+      <div class="vs"><div class="vslbl">2nd Support</div><div class="vsval" style="color:var(--green);opacity:.7" id="btc-sr-s2">---</div></div>
+      <div class="vs"><div class="vslbl">Bull OB Zone</div><div class="vsval" style="color:var(--purple)" id="btc-sr-ob-bull">---</div></div>
+      <div class="vs"><div class="vslbl">Bear OB Zone</div><div class="vsval" style="color:var(--amber)" id="btc-sr-ob-bear">---</div></div>
+      <div class="vs"><div class="vslbl">Fib 0.618</div><div class="vsval" style="color:var(--gold)" id="btc-sr-fib618">---</div></div>
+      <div class="vs"><div class="vslbl">OTE 70.5%</div><div class="vsval" style="color:var(--gold)" id="btc-sr-fib705">---</div></div>
+    </div>
+    <div style="padding:5px 9px;background:var(--bg3);border-radius:4px;font-family:var(--mono);font-size:9px">
+      <span style="color:var(--t3)">Zone: </span><span id="btc-sr-zone" style="color:var(--gold)">---</span>
+      &nbsp;|&nbsp;<span id="btc-sr-bias">---</span>
+    </div>
   </div>
+
+  <!-- BTC SMC AGENTS -->
+  <div class="stitle">BTC SMC Agents</div>
+  <div class="g3" style="gap:8px;margin-bottom:10px">
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(239,68,68,.15);color:var(--red)">SWEEP · 1H</div>
+      <div class="ag-h"><div class="av" style="background:rgba(239,68,68,.12);color:var(--red);font-size:9px;font-weight:700">LQ</div>
+        <div><div class="an">Liquidity Sweep</div><div class="ar">BSL · SSL · EQUAL H/L</div></div></div>
+      <div class="sig sw" id="btc-ag-sweep">Scanning...</div>
+      <div class="rw"><span class="rl">Equal Highs (BSL)</span><span class="rv" id="btc-sw-bsl">---</span></div>
+      <div class="rw"><span class="rl">Equal Lows (SSL)</span><span class="rv" id="btc-sw-ssl">---</span></div>
+      <div class="rw"><span class="rl">Sweep Detected</span><span id="btc-sw-det" class="tag tw">NONE</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="btc-sw-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(168,85,247,.15);color:var(--purple)">OB+FVG · 1H</div>
+      <div class="ag-h"><div class="av" style="background:rgba(168,85,247,.12);color:var(--purple);font-size:9px;font-weight:700">OB</div>
+        <div><div class="an">Order Block / FVG</div><div class="ar">INSTITUTIONAL · IMBALANCE</div></div></div>
+      <div class="sig sw" id="btc-ag-ob">Scanning...</div>
+      <div class="rw"><span class="rl">Bull OB Zone</span><span class="rv" id="btc-ob-bull">---</span></div>
+      <div class="rw"><span class="rl">Bear OB Zone</span><span class="rv" id="btc-ob-bear">---</span></div>
+      <div class="rw"><span class="rl">FVG Present</span><span id="btc-ob-fvg" class="tag tw">NONE</span></div>
+      <div class="rw"><span class="rl">In OB?</span><span id="btc-ob-in" class="tag tw">NO</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="btc-ob-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(240,192,64,.15);color:var(--gold)">FIB · 0.618+OTE</div>
+      <div class="ag-h"><div class="av" style="background:rgba(240,192,64,.12);color:var(--gold);font-size:9px;font-weight:700">FIB</div>
+        <div><div class="an">Fibonacci</div><div class="ar">0.382 · 0.618 · 0.705 OTE</div></div></div>
+      <div class="sig sw" id="btc-ag-fib">Scanning...</div>
+      <div class="rw"><span class="rl">Swing High / Low</span><span class="rv" id="btc-fib-range">---</span></div>
+      <div class="rw"><span class="rl">0.618 Level</span><span class="rv" id="btc-fib-618">---</span></div>
+      <div class="rw"><span class="rl">OTE 70.5%</span><span class="rv" id="btc-fib-705">---</span></div>
+      <div class="rw"><span class="rl">At Level?</span><span id="btc-fib-at" class="tag tw">NO</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="btc-fib-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(34,197,94,.12);color:var(--green)">EMA 8/21/50</div>
+      <div class="ag-h"><div class="av" style="background:rgba(34,197,94,.1);color:var(--green);font-size:9px;font-weight:700">EMA</div>
+        <div><div class="an">EMA Trend Stack</div><div class="ar">TREND · PULLBACK · CROSS</div></div></div>
+      <div class="sig sw" id="btc-ag-ema">Scanning...</div>
+      <div class="rw"><span class="rl">EMA 8 / 21</span><span class="rv" id="btc-ema-fast">---</span></div>
+      <div class="rw"><span class="rl">EMA 50 / 200</span><span class="rv" id="btc-ema-slow">---</span></div>
+      <div class="rw"><span class="rl">Stack</span><span id="btc-ema-stack" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="btc-ema-sig" class="tag tw">WAIT</span></div>
+    </div>
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(96,165,250,.12);color:var(--blue)">VOL PROFILE</div>
+      <div class="ag-h"><div class="av" style="background:rgba(96,165,250,.1);color:var(--blue);font-size:9px;font-weight:700">VP</div>
+        <div><div class="an">Volume Profile</div><div class="ar">HIGH VOL · LOW VOL · TREND</div></div></div>
+      <div class="sig sw" id="btc-ag-vol">Scanning...</div>
+      <div class="rw"><span class="rl">Current Vol</span><span class="rv" id="btc-vp-cur">---</span></div>
+      <div class="rw"><span class="rl">vs 10-bar Avg</span><span class="rv" id="btc-vp-rel">---</span></div>
+      <div class="rw"><span class="rl">Vol Signal</span><span id="btc-vp-sig" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Trend</span><span id="btc-vp-trend" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">Signal</span><span id="btc-vp-bias" class="tag tw">WAIT</span></div>
+    </div>
+
+    <div class="ag">
+      <div class="ag-tf" style="background:rgba(20,184,166,.12);color:var(--teal)">RISK MGR</div>
+      <div class="ag-h"><div class="av" style="background:rgba(20,184,166,.1);color:var(--teal);font-size:9px;font-weight:700">RM</div>
+        <div><div class="an">Risk Manager</div><div class="ar">LOT · SL · R:R · GRADE</div></div></div>
+      <div class="sig sw" id="btc-ag-risk">Waiting...</div>
+      <div class="rw"><span class="rl">Trade Grade</span><span id="btc-risk-q" class="tag tw">---</span></div>
+      <div class="rw"><span class="rl">SL / TP1</span><span class="rv" id="btc-risk-sl">---</span></div>
+      <div class="rw"><span class="rl">R:R Ratio</span><span class="rv" style="color:var(--green)" id="btc-risk-rr">---</span></div>
+      <div class="rw"><span class="rl">Agents Agree</span><span class="rv" id="btc-risk-conf">---</span></div>
+    </div>
+
+  </div>
+
   <div class="brow"><button class="btn buy" onclick="execBTCOrder('BUY')">▶ BUY BTC</button><button class="btn sell" onclick="execBTCOrder('SELL')">▶ SELL BTC</button></div>
 
   <!-- BTC SIGNAL PANELS — same as XAUUSD, 24/7 no session filter -->
@@ -1513,7 +1617,29 @@ function renderXAU(){
   var ce=gel('xc'); if(ce){ ce.textContent=cs; ce.className='val '+(chg>=0?'up':'dn'); }
   var tc=gel('t-xauc'); if(tc){ tc.textContent=(chg>=0?'+':'')+fmt2(chg); tc.className=chg>=0?'tu':'td'; }
   set('xh', fmt2(XAU.high)); set('xl', fmt2(XAU.low));
-  var xe=gel('xp'); if(xe){ xe.classList.add('flash'); setTimeout(function(){ xe.classList.remove('flash'); }, 350); }
+  // Gold market status: Mon-Fri 23:00 IST (Sun) to 23:30 IST (Fri) = open
+  // Sat 00:00 IST to Sun 22:59 IST = CLOSED (weekend)
+  var now=new Date();
+  var ist=new Date(now.getTime()+19800000);
+  var dow=ist.getUTCDay(); // 0=Sun,1=Mon,...6=Sat
+  var istMins=ist.getUTCHours()*60+ist.getUTCMinutes();
+  // Gold closed: Friday after 23:30 IST (dow=5,mins>=1410) through Sunday 22:59 IST (dow=0,mins<=1379)
+  var goldClosed=(dow===6)||  // all Saturday
+    (dow===5&&istMins>=1410)|| // Friday after 11:30 PM IST
+    (dow===0&&istMins<1380);   // Sunday before 11:00 PM IST
+  var feedEl=gel('feed-lbl'); if(feedEl) feedEl.style.color=goldClosed?'var(--t3)':'var(--green)';
+  var xe=gel('xp');
+  if(xe){
+    if(goldClosed){
+      xe.style.opacity='0.5';
+      xe.classList.remove('flash');
+      if(feedEl) feedEl.textContent='MARKET CLOSED (Weekend)';
+    } else {
+      xe.style.opacity='1';
+      xe.classList.add('flash');
+      setTimeout(function(){ xe.classList.remove('flash'); },350);
+    }
+  }
   set('t-spread', (0.28+Math.random()*.12).toFixed(2));
 
   // Update bias label in header
@@ -1546,11 +1672,30 @@ function fetchXAUCandles(){
     });
 }
 
+// BTC multi-TF candle stores
+var btcCandles30M=[], btcCandles1H=[], btcCandles4H=[], btcCandlesD=[];
+
 function fetchBTCCandles(){
-  fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=30m&limit=20')
-    .then(function(r){ return r.json(); })
-    .then(function(d){ if(!Array.isArray(d)||!d.length) throw new Error(); parseCandles(d,'btc'); })
-    .catch(function(){ buildSimCandles('btc-vol-candles','BTC','btc-vs-cur','btc-vs-avg','btc-vs-rel','btc-vs-sig','btc-vol-info'); });
+  var base='https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=';
+  var tfs=[{tf:'30m',limit:80,store:'30M'},{tf:'1h',limit:60,store:'1H'},
+           {tf:'4h',limit:50,store:'4H'},{tf:'1d',limit:30,store:'D'}];
+  tfs.forEach(function(t){
+    fetch(base+t.tf+'&limit='+t.limit)
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(!Array.isArray(d)||!d.length) return;
+        var parsed=d.map(function(k){
+          var o=parseFloat(k[1]),h=parseFloat(k[2]),l=parseFloat(k[3]),cl=parseFloat(k[4]);
+          return{t:k[0],open:o,o:o,high:h,h:h,low:l,l:l,close:cl,c:cl,vol:parseFloat(k[5])};
+        });
+        if(t.store==='30M'){btcCandles30M=parsed;btcCandles=parsed;renderCandleVol('btc-vol-candles',parsed,'BTC','btc-vs-cur','btc-vs-avg','btc-vs-rel','btc-vs-sig','btc-vol-info');}
+        else if(t.store==='1H') btcCandles1H=parsed;
+        else if(t.store==='4H') btcCandles4H=parsed;
+        else if(t.store==='D')  btcCandlesD=parsed;
+      }).catch(function(){
+        if(t.store==='30M') buildSimCandles('btc-vol-candles','BTC','btc-vs-cur','btc-vs-avg','btc-vs-rel','btc-vs-sig','btc-vol-info');
+      });
+  });
 }
 
 function parseCandles(data, sym){
@@ -2116,26 +2261,157 @@ function updateAgents(){
 
 
 function updateAgentsBTC(){
-  var p=BTC.price, o=BTC.dailyOpen||p; if(!p) return;
-  var chg=p-o, bull=chg>=0;
-  var rng=BTC.high-BTC.low||5000;
-  var f618=Math.round(BTC.high-rng*0.618), f786=Math.round(BTC.high-rng*0.786);
-  var ob=bull?('$'+fmtK(p*0.978)+' – $'+fmtK(p*0.983)):('$'+fmtK(p*1.017)+' – $'+fmtK(p*1.023));
-  setSig('btc-anna',bull?'sb':'ss','[1H] '+(bull?'Bullish. Higher lows. Daily open '+fmtK(o)+' below price.':'Bearish. Lower highs. Daily open '+fmtK(o)+' above price.')+' [30M] Entry in '+ob);
-  set('btc-trend',bull?'BULLISH':'BEARISH'); set('btc-ob2',ob); set('btc-ent','$'+fmtK(bull?p*0.98:p*1.02));
-  setSig('btc-raj',bull?'sb':'ss','[30M] OB at '+ob+'. '+(bull?'FVG unfilled below.':'FVG unfilled above.')+' [5M] Rejection candle in OB zone = entry.');
-  set('btc-ob',ob); set('btc-tp','$'+fmtK(bull?p*1.045:p*0.955)); set('btc-sl','$'+fmtK(bull?p*0.972:p*1.028));
-  setSig('btc-fib',bull?'sb':'ss','Golden pocket $'+fmtK(f618)+'. '+(Math.abs(p-f618)<rng*0.02?'PRICE AT GOLDEN POCKET!':'Watch $'+fmtK(f618)+' for entry.'));
-  set('btc-618','$'+fmtK(f618)); set('btc-786','$'+fmtK(f786)); setTag('btc-ftag',bull?'tb':'ts2',bull?'LOOK BUY':'LOOK SELL');
-  var vd=bull?'BUY':'SELL';
-  var bv=[{k:'anna',v:bull?'buy':'sell'},{k:'raj',v:bull?'buy':'sell'},{k:'max',v:'wait'},{k:'zoe',v:bull?'buy':'sell'},{k:'fib',v:bull?'buy':'sell'}];
-  var bc=0,wc=0,sc=0;
-  bv.forEach(function(x){ var el=gel('bv-'+x.k); if(el){ el.textContent=x.v.toUpperCase(); el.className='vb '+x.v; } if(x.v==='buy')bc++;else if(x.v==='sell')sc++;else wc++; });
-  var tot=bc+wc+sc;
-  gel('bcb-b').style.width=(bc/tot*100)+'%'; gel('bcb-w').style.width=(wc/tot*100)+'%'; gel('bcb-s').style.width=(sc/tot*100)+'%';
-  set('bcons',bc+' BUY · '+wc+' WAIT · '+sc+' SELL');
-  var bv2=gel('bverdict'); if(bv2){ bv2.textContent=vd; bv2.style.color=bull?'var(--green)':'var(--red)'; }
+  var p=BTC.price; if(!p||p<100) return;
+  var o=BTC.dailyOpen||p;
+  var c1h=btcCandles1H.length>=10?btcCandles1H:(btcCandles30M.length>=10?btcCandles30M:null);
+
+  if(!c1h||c1h.length<5){
+    ['btc-ag-sweep','btc-ag-ob','btc-ag-fib','btc-ag-ema','btc-ag-vol','btc-ag-risk'].forEach(function(id){setSig(id,'sw','Loading candles...');});
+    var bull=p>o;
+    setTag('btc-mtf-d',bull?'tb':'ts2','D: '+(bull?'▲':'▼'));
+    ['btc-mtf-4h','btc-mtf-1h','btc-mtf-30'].forEach(function(id){setTag(id,'tw','...');});
+    return;
+  }
+
+  // MTF BIAS
+  function btcTfBias(cands){
+    if(!cands||cands.length<3) return 'neutral';
+    var closes=cands.map(function(cc){return cc.close;});
+    var ema21=calcEMA(closes,21);
+    return ema21?(closes[closes.length-1]>ema21?'bull':'bear'):(closes[closes.length-1]>closes[closes.length-2]?'bull':'bear');
+  }
+  var mtfD=btcTfBias(btcCandlesD), mtf4H=btcTfBias(btcCandles4H);
+  var mtf1H=btcTfBias(btcCandles1H), mtf30=btcTfBias(btcCandles30M);
+  var bullTFs=[mtfD,mtf4H,mtf1H,mtf30].filter(function(b){return b==='bull';}).length;
+  var bearTFs=[mtfD,mtf4H,mtf1H,mtf30].filter(function(b){return b==='bear';}).length;
+  function tfTag(id,bias,lbl){setTag(id,bias==='bull'?'tb':bias==='bear'?'ts2':'tw',lbl+': '+(bias==='bull'?'▲':bias==='bear'?'▼':'—'));}
+  tfTag('btc-mtf-d',mtfD,'D'); tfTag('btc-mtf-4h',mtf4H,'4H');
+  tfTag('btc-mtf-1h',mtf1H,'1H'); tfTag('btc-mtf-30',mtf30,'30M');
+  setTag('btc-mtf-align',bullTFs>=3||bearTFs>=3?'tb':'tw',bullTFs>=3?bullTFs+'/4 BULL':bearTFs>=3?bearTFs+'/4 BEAR':'MIXED');
+
+  // AGENT 1: LIQUIDITY SWEEP
+  var sweep=detectLiquiditySweep(c1h);
+  var sweepBias=sweep.dir;
+  set('btc-sw-bsl',sweep.bslLevel?'$'+fmtK(sweep.bslLevel)+' ('+sweep.bslTouches+'×)':'No equal highs');
+  set('btc-sw-ssl',sweep.sslLevel?'$'+fmtK(sweep.sslLevel)+' ('+sweep.sslTouches+'×)':'No equal lows');
+  setTag('btc-sw-det',sweep.swept?(sweepBias==='bull'?'tb':'ts2'):'tw',sweep.swept?(sweep.type==='SSL_SWEPT'?'SSL SWEPT ★':'BSL SWEPT ★'):'NO SWEEP');
+  setTag('btc-sw-sig',sweepBias==='bull'?'tb':sweepBias==='bear'?'ts2':'tw',sweep.swept?(sweepBias==='bull'?'BUY after SSL Sweep':'SELL after BSL Sweep'):'WAIT');
+  setSig('btc-ag-sweep',sweep.swept?(sweepBias==='bull'?'sb':'ss'):'sw',sweep.swept?('Liquidity swept · '+(sweepBias==='bull'?'SSL $'+fmtK(sweep.sslLevel||0):'BSL $'+fmtK(sweep.bslLevel||0))):'Monitoring for liquidity sweep...');
+  var vSw=gel('btc-v-sweep'); if(vSw){vSw.className='vb '+(sweepBias==='bull'?'buy':sweepBias==='bear'?'sell':'wait');vSw.textContent=sweepBias==='bull'?'BUY':sweepBias==='bear'?'SELL':'WAIT';}
+
+  // AGENT 2: ORDER BLOCK + FVG
+  var ob=detectOrderBlocks(c1h);
+  var obBias=ob.obDir;
+  set('btc-ob-bull',ob.bullOB?'$'+fmtK(ob.bullOB.bottom)+' – $'+fmtK(ob.bullOB.top):'No bull OB');
+  set('btc-ob-bear',ob.bearOB?'$'+fmtK(ob.bearOB.bottom)+' – $'+fmtK(ob.bearOB.top):'No bear OB');
+  setTag('btc-ob-fvg',ob.fvg?(ob.fvgDir==='bull'?'tb':'ts2'):'tw',ob.fvg?(ob.fvgDir==='bull'?'BULL FVG ★':'BEAR FVG ★'):'NO FVG');
+  setTag('btc-ob-in',ob.inOB?(obBias==='bull'?'tb':'ts2'):'tw',ob.inOB?(ob.inBullOB?'IN BULL OB ✓':'IN BEAR OB ✓'):'NOT IN OB');
+  setTag('btc-ob-sig',obBias==='bull'?'tb':obBias==='bear'?'ts2':'tw',ob.inOB?(obBias==='bull'?'BUY — In Bull OB':'SELL — In Bear OB'):ob.fvg?(ob.fvgDir==='bull'?'FVG BULL':'FVG BEAR'):'WAIT');
+  setSig('btc-ag-ob',ob.inOB?(obBias==='bull'?'sb':'ss'):(ob.fvg?'sw':'sw'),ob.inOB?('In '+(ob.inBullOB?'Bullish':'Bearish')+' OB $'+fmtK(ob.inBullOB&&ob.bullOB?ob.bullOB.bottom:ob.bearOB?ob.bearOB.bottom:0)):ob.fvg?('FVG '+ob.fvgDir):'No OB interaction');
+  var vOB=gel('btc-v-ob'); if(vOB){vOB.className='vb '+(obBias==='bull'?'buy':obBias==='bear'?'sell':'wait');vOB.textContent=obBias==='bull'?'BUY':obBias==='bear'?'SELL':'WAIT';}
+
+  // AGENT 3: FIBONACCI
+  var fib=detectFibLevels(c1h);
+  var fibBias=fib.atLevel?fib.bias:'neutral';
+  set('btc-fib-range','$'+fmtK(fib.swingLow||0)+' – $'+fmtK(fib.swingHigh||0));
+  set('btc-fib-618','$'+fmtK(fib.fib618||0)+(fib.hitFib&&fib.hitFib.label==='0.618 ★'?' ← PRICE':''));
+  set('btc-fib-705','$'+fmtK(fib.fib705||0)+(fib.isOTE?' ← OTE PRICE':''));
+  setTag('btc-fib-at',fib.atLevel?(fib.isOTE?'tb':fibBias==='bull'?'tb':'ts2'):'tw',fib.atLevel?'AT '+fib.hitFib.label+(fib.isOTE?' ★':''):'Not at Fib');
+  setTag('btc-fib-sig',fibBias==='bull'?'tb':fibBias==='bear'?'ts2':'tw',fib.atLevel?(fib.isOTE?'STRONG '+(fibBias==='bull'?'BUY':'SELL')+' OTE':fibBias==='bull'?'BUY Fib':'SELL Fib'):'WAIT');
+  setSig('btc-ag-fib',fib.atLevel?(fibBias==='bull'?'sb':'ss'):'sw',fib.atLevel?('Fib '+fib.hitFib.label+(fib.isOTE?' OTE ★':'')+' · $'+fmtK(fib.swingLow||0)+' – $'+fmtK(fib.swingHigh||0)):'No key Fib level');
+  var vFib=gel('btc-v-fib'); if(vFib){vFib.className='vb '+(fibBias==='bull'?'buy':fibBias==='bear'?'sell':'wait');vFib.textContent=fibBias==='bull'?'BUY':fibBias==='bear'?'SELL':'WAIT';}
+
+  // AGENT 4: EMA STACK
+  var ema=detectEMATrend(c1h);
+  var emaBias=ema.bias;
+  set('btc-ema-fast',(ema.ema8?'$'+fmtK(ema.ema8):'--')+'  /  '+(ema.ema21?'$'+fmtK(ema.ema21):'--'));
+  set('btc-ema-slow',(ema.ema50?'$'+fmtK(ema.ema50):'--')+'  /  '+(ema.ema200?'$'+fmtK(ema.ema200):'--'));
+  setTag('btc-ema-stack',ema.bullStack?'tb':ema.bearStack?'ts2':'tw',ema.bullStack?'BULL STACK ✓':ema.bearStack?'BEAR STACK ✓':ema.goldenCross?'GOLDEN CROSS★':ema.deathCross?'DEATH CROSS★':'NEUTRAL');
+  setTag('btc-ema-sig',emaBias==='bull'?'tb':emaBias==='bear'?'ts2':'tw',ema.bullStack?'BUY Stack':ema.bearStack?'SELL Stack':ema.goldenCross?'BUY Cross':ema.deathCross?'SELL Cross':emaBias==='bull'?'BUY Trend':emaBias==='bear'?'SELL Trend':'WAIT');
+  setSig('btc-ag-ema',emaBias==='bull'?'sb':emaBias==='bear'?'ss':'sw',(ema.bullStack?'Bull stack 8>21>50':ema.bearStack?'Bear stack 8<21<50':emaBias==='bull'?'Bullish EMA':'Bearish EMA')+(ema.pullbackToEMA21?' · At EMA21':''));
+  var vEma=gel('btc-v-ema'); if(vEma){vEma.className='vb '+(emaBias==='bull'?'buy':emaBias==='bear'?'sell':'wait');vEma.textContent=emaBias==='bull'?'BUY':emaBias==='bear'?'SELL':'WAIT';}
+
+  // AGENT 5: VOLUME PROFILE
+  var vols=c1h.map(function(cc){return cc.vol;});
+  var avgVol=vols.slice(-11,-1).reduce(function(a,b){return a+b;},0)/10;
+  var curVol=vols[vols.length-1]||0;
+  var volRatio=avgVol>0?curVol/avgVol:1;
+  var volBias='neutral';
+  var bull1H=c1h[c1h.length-1].close>c1h[c1h.length-1].open;
+  if(volRatio>1.4&&bull1H) volBias='bull';
+  else if(volRatio>1.4&&!bull1H) volBias='bear';
+  var volLabel=volRatio>2?'VERY HIGH':volRatio>1.4?'HIGH':volRatio>0.8?'NORMAL':'LOW';
+  var volTrend=vols.slice(-5).reduce(function(a,b,i,arr){return i>0&&b>arr[i-1]?a+1:a-1;},0);
+  set('btc-vp-cur','$'+fmtK(curVol));
+  set('btc-vp-rel',(volRatio>=1?'+':'')+Math.round((volRatio-1)*100)+'%');
+  setTag('btc-vp-sig',volRatio>1.4?'tb':volRatio<0.8?'tw':'ti',volLabel);
+  setTag('btc-vp-trend',volTrend>0?'tb':volTrend<0?'ts2':'tw',volTrend>1?'INCREASING ▲':volTrend<-1?'DECREASING ▼':'FLAT →');
+  setTag('btc-vp-bias',volBias==='bull'?'tb':volBias==='bear'?'ts2':'tw',volBias==='bull'?'BUY — High vol bull':volBias==='bear'?'SELL — High vol bear':'WAIT');
+  setSig('btc-ag-vol',volBias==='bull'?'sb':volBias==='bear'?'ss':'sw','Vol '+Math.round(volRatio*100)+'% of avg · '+volLabel+(volBias!=='neutral'?' · '+(bull1H?'Bullish':'Bearish')+' candle on high vol':''));
+  var vVol=gel('btc-v-vol'); if(vVol){vVol.className='vb '+(volBias==='bull'?'buy':volBias==='bear'?'sell':'wait');vVol.textContent=volBias==='bull'?'BUY':volBias==='bear'?'SELL':'WAIT';}
+
+  // CONSENSUS
+  var biases=[sweepBias,obBias,fibBias,emaBias,volBias];
+  var buyC=biases.filter(function(b){return b==='bull';}).length;
+  var sellC=biases.filter(function(b){return b==='bear';}).length;
+  var totalScore=sweep.score+ob.score+fib.score+ema.score+(volBias!=='neutral'?2:0);
+  var cb=gel('btc-cb-b'),cw=gel('btc-cb-w'),cs=gel('btc-cb-s');
+  if(cb)cb.style.width=(buyC/5*100)+'%';
+  if(cw)cw.style.width=(Math.max(0,5-buyC-sellC)/5*100)+'%';
+  if(cs)cs.style.width=(sellC/5*100)+'%';
+  var bull=p>o;
+  set('btc-cons-text',buyC+' BUY · '+sellC+' SELL · '+(5-buyC-sellC)+' WAIT — Price '+(bull?'ABOVE':'BELOW')+' daily open $'+fmtK(o));
+  set('btc-cons-score',totalScore);
+  set('btc-cons-grade',totalScore+'/10');
+  var scEl=gel('btc-cons-score'); if(scEl) scEl.style.color=totalScore>=7?'var(--green)':totalScore>=5?'var(--amber)':'var(--t3)';
+
+  // S/R LEVELS PANEL
+  var tol=p*0.003, n=c1h.length, srlvls=[];
+  for(var i=2;i<n-2;i++){
+    if(c1h[i].high>c1h[i-1].high&&c1h[i].high>c1h[i-2].high&&c1h[i].high>c1h[i+1].high&&c1h[i].high>c1h[i+2].high){
+      var lh=Math.round(c1h[i].high);
+      if(!srlvls.some(function(l){return Math.abs(l.price-lh)<tol&&l.type==='res';})) srlvls.push({price:lh,type:'res',touches:1});
+    }
+    if(c1h[i].low<c1h[i-1].low&&c1h[i].low<c1h[i-2].low&&c1h[i].low<c1h[i+1].low&&c1h[i].low<c1h[i+2].low){
+      var ll=Math.round(c1h[i].low);
+      if(!srlvls.some(function(l){return Math.abs(l.price-ll)<tol&&l.type==='sup';})) srlvls.push({price:ll,type:'sup',touches:1});
+    }
+  }
+  srlvls.forEach(function(lv){c1h.forEach(function(cc){if(Math.abs(cc.high-lv.price)<tol||Math.abs(cc.low-lv.price)<tol) lv.touches++;});});
+  var ress=srlvls.filter(function(l){return l.type==='res'&&l.price>p;}).sort(function(a,b){return a.price-b.price;});
+  var sups=srlvls.filter(function(l){return l.type==='sup'&&l.price<p;}).sort(function(a,b){return b.price-a.price;});
+  if(!ress.length) ress=[{price:Math.round(BTC.high||p+500),type:'res',touches:1}];
+  if(!sups.length) sups=[{price:Math.round(BTC.low||p-500),type:'sup',touches:1}];
+  set('btc-sr-r1','$'+fmtK(ress[0].price)+' ('+ress[0].touches+'×)');
+  set('btc-sr-r2',ress[1]?'$'+fmtK(ress[1].price)+' ('+ress[1].touches+'×)':'---');
+  set('btc-sr-s1','$'+fmtK(sups[0].price)+' ('+sups[0].touches+'×)');
+  set('btc-sr-s2',sups[1]?'$'+fmtK(sups[1].price)+' ('+sups[1].touches+'×)':'---');
+  set('btc-sr-ob-bull',ob.bullOB?'$'+fmtK(ob.bullOB.bottom)+' – $'+fmtK(ob.bullOB.top):'Scanning...');
+  set('btc-sr-ob-bear',ob.bearOB?'$'+fmtK(ob.bearOB.bottom)+' – $'+fmtK(ob.bearOB.top):'Scanning...');
+  set('btc-sr-fib618','$'+fmtK(fib.fib618||0)+(Math.abs(p-(fib.fib618||0))<p*0.005?' ← PRICE':''));
+  set('btc-sr-fib705','$'+fmtK(fib.fib705||0)+(fib.isOTE?' ← OTE PRICE':''));
+  var nearR=ress[0]&&Math.abs(p-ress[0].price)<p*0.005;
+  var nearS=sups[0]&&Math.abs(p-sups[0].price)<p*0.005;
+  var zoneLabel=nearR?'⚠ AT RESISTANCE — Watch SELL':nearS?'⚠ AT SUPPORT — Watch BUY':'Between levels';
+  set('btc-sr-zone',zoneLabel);
+  var zEl=gel('btc-sr-zone'); if(zEl) zEl.style.color=nearR?'var(--red)':nearS?'var(--green)':'var(--amber)';
+  var bEl=gel('btc-sr-bias'); if(bEl){bEl.textContent=bull?'▲ BULL BIAS':'▼ BEAR BIAS';bEl.style.color=bull?'var(--green)':'var(--red)';}
+  set('btc-sr-count',srlvls.length+' levels');
+
+  // RISK MANAGER
+  var slPct=0.02; // BTC 2% SL
+  var slDist=p*slPct;
+  var slPips=Math.round(slDist);
+  var tp1Dist=slDist*2.5;
+  var rr=(tp1Dist/slDist).toFixed(1);
+  var grade=totalScore>=7&&(buyC>=3||sellC>=3)?'A+':totalScore>=5&&(buyC>=2||sellC>=2)?'A':'B';
+  setTag('btc-risk-q',grade==='A+'?'tb':grade==='A'?'ti':'tw',grade+' · '+totalScore+'/10');
+  set('btc-risk-sl','$'+fmtK(Math.round(slDist))+' SL · $'+fmtK(Math.round(tp1Dist))+' TP1');
+  set('btc-risk-rr','1:'+rr+(parseFloat(rr)>=2.5?' ✓':''));
+  set('btc-risk-conf',Math.max(buyC,sellC)+'/5 agents · '+totalScore+'/10');
+  setSig('btc-ag-risk',grade==='A+'||grade==='A'?'sb':'sw',grade+' · '+(buyC>=3?buyC:sellC)+'/5 aligned · SL $'+fmtK(Math.round(slDist))+' · R:R 1:'+rr);
 }
+
 
 // ─── NEWS — FIXED DATE FILTERING ─────────────────
 // ROOT CAUSE FIX: FF JSON dates are in America/New_York time (ET = UTC-4 during DST)
@@ -2424,46 +2700,109 @@ function clearBTCSignalHistory(){
 }
 
 // ─── CROSS-DEVICE SIGNAL SYNC ────────────────────
+// ─── AUTO SIGNAL SYNC (BroadcastChannel + modal export) ────────
+var syncChannel=null;
+try{ syncChannel=new BroadcastChannel('warroom_signals'); }catch(e){}
+if(syncChannel){
+  syncChannel.onmessage=function(ev){
+    if(ev.data&&ev.data.type==='SIGNAL_UPDATE'){
+      renderSignalPanels();renderBTCSignalPanels();
+      toast('📡 Signals synced from another tab');
+    }
+  };
+}
+function broadcastSignalUpdate(){
+  if(syncChannel) try{ syncChannel.postMessage({type:'SIGNAL_UPDATE',ts:Date.now()}); }catch(e){}
+}
+
 function exportSignals(){
   var allSigs=loadSignals();
   var btcSigs=loadBTCSignals();
-  var payload=JSON.stringify({xau:allSigs,btc:btcSigs,exported:new Date().toISOString()});
-  if(navigator.clipboard){
+  var payload=JSON.stringify({xau:allSigs,btc:btcSigs,v:'6.2',exported:new Date().toISOString()});
+  if(navigator.clipboard&&window.isSecureContext){
     navigator.clipboard.writeText(payload).then(function(){
-      toast('✓ '+allSigs.length+' XAU + '+btcSigs.length+' BTC signals copied! Paste on other device.');
-    }).catch(function(){ prompt('Copy these signals:',payload); });
-  } else {
-    prompt('Copy these signals:',payload);
-  }
+      toast('✓ '+allSigs.length+' XAU + '+btcSigs.length+' BTC signals copied!');
+    }).catch(function(){ _showExportModal(payload); });
+  } else { _showExportModal(payload); }
+}
+function _showExportModal(payload){
+  var old=document.getElementById('exp-modal'); if(old) old.remove();
+  var wrap=document.createElement('div');
+  wrap.id='exp-modal';
+  wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10001;display:flex;align-items:center;justify-content:center;padding:16px';
+  var box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border:1px solid var(--b2);border-radius:8px;padding:16px;max-width:480px;width:100%';
+  var title=document.createElement('div');
+  title.style.cssText='font-family:var(--mono);font-size:10px;color:var(--gold);margin-bottom:9px';
+  title.textContent='EXPORT — Select All & Copy to other device';
+  var ta=document.createElement('textarea');
+  ta.id='exp-txt'; ta.readOnly=true;
+  ta.style.cssText='width:100%;height:100px;background:var(--bg3);border:1px solid var(--b1);color:var(--t1);font-family:var(--mono);font-size:8px;padding:7px;border-radius:4px;resize:none;box-sizing:border-box';
+  ta.value=payload;
+  var row=document.createElement('div');
+  row.style.cssText='display:flex;gap:7px;margin-top:9px;justify-content:flex-end';
+  var copyBtn=document.createElement('button');
+  copyBtn.className='btn'; copyBtn.textContent='Copy All';
+  copyBtn.style.cssText='font-size:9px;padding:4px 12px';
+  copyBtn.onclick=function(){ta.select();document.execCommand('copy');toast('Copied!');};
+  var closeBtn=document.createElement('button');
+  closeBtn.className='btn'; closeBtn.textContent='Close';
+  closeBtn.style.cssText='font-size:9px;padding:4px 12px';
+  closeBtn.onclick=function(){wrap.remove();};
+  row.appendChild(copyBtn); row.appendChild(closeBtn);
+  box.appendChild(title); box.appendChild(ta); box.appendChild(row);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  setTimeout(function(){ta.focus();ta.select();},80);
 }
 
 function importSignals(){
-  var txt=prompt('Paste exported signals JSON here:');
-  if(!txt||!txt.trim()) return;
+  var old=document.getElementById('imp-modal'); if(old) old.remove();
+  var wrap=document.createElement('div');
+  wrap.id='imp-modal';
+  wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10001;display:flex;align-items:center;justify-content:center;padding:16px';
+  var box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border:1px solid var(--b2);border-radius:8px;padding:16px;max-width:480px;width:100%';
+  var title=document.createElement('div');
+  title.style.cssText='font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:9px';
+  title.textContent='IMPORT — Paste exported signal data';
+  var ta=document.createElement('textarea');
+  ta.id='imp-txt'; ta.placeholder='Paste here...';
+  ta.style.cssText='width:100%;height:100px;background:var(--bg3);border:1px solid var(--b1);color:var(--t1);font-family:var(--mono);font-size:8px;padding:7px;border-radius:4px;resize:none;box-sizing:border-box';
+  var row=document.createElement('div');
+  row.style.cssText='display:flex;gap:7px;margin-top:9px;justify-content:flex-end';
+  var impBtn=document.createElement('button');
+  impBtn.className='btn'; impBtn.textContent='Import';
+  impBtn.style.cssText='font-size:9px;padding:4px 12px;border-color:rgba(34,197,94,.4);color:var(--green)';
+  impBtn.onclick=function(){ _doImport(ta,wrap); };
+  var cancelBtn=document.createElement('button');
+  cancelBtn.className='btn'; cancelBtn.textContent='Cancel';
+  cancelBtn.style.cssText='font-size:9px;padding:4px 12px';
+  cancelBtn.onclick=function(){wrap.remove();};
+  row.appendChild(impBtn); row.appendChild(cancelBtn);
+  box.appendChild(title); box.appendChild(ta); box.appendChild(row);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  setTimeout(function(){ta.focus();},80);
+}
+
+function _doImport(taEl,wrapEl){
+  if(!taEl||!taEl.value.trim()){toast('Paste export data first');return;}
   try{
-    var data=JSON.parse(txt.trim());
-    var xauSigs=data.xau||data;
+    var data=JSON.parse(taEl.value.trim());
+    var xauSigs=Array.isArray(data)?data:(data.xau||[]);
     var btcSigs=data.btc||[];
-    if(!Array.isArray(xauSigs)) throw new Error('Invalid format');
-    var existing=loadSignals();
-    var merged=existing.slice();
-    xauSigs.forEach(function(s){
-      var dup=merged.some(function(e){ return e.id===s.id||(s.sigKey&&e.sigKey===s.sigKey); });
-      if(!dup) merged.push(s);
-    });
+    var ex=loadSignals(),merged=ex.slice();
+    xauSigs.forEach(function(s){if(!merged.some(function(e){return e.id===s.id;})) merged.push(s);});
     saveSignals(merged);
-    var existingBTC=loadBTCSignals();
-    var mergedBTC=existingBTC.slice();
-    btcSigs.forEach(function(s){
-      if(!mergedBTC.some(function(e){ return e.id===s.id; })) mergedBTC.push(s);
-    });
-    saveBTCSignals(mergedBTC);
-    renderSignalPanels();
-    renderBTCSignalPanels();
-    toast('✓ Imported '+xauSigs.length+' XAU + '+btcSigs.length+' BTC signals.');
-  }catch(e){
-    toast('✗ Invalid data — copy exactly from Export button.');
-  }
+    var exB=loadBTCSignals(),mergedB=exB.slice();
+    btcSigs.forEach(function(s){if(!mergedB.some(function(e){return e.id===s.id;})) mergedB.push(s);});
+    saveBTCSignals(mergedB);
+    renderSignalPanels();renderBTCSignalPanels();
+    broadcastSignalUpdate();
+    if(wrapEl) wrapEl.remove();
+    toast('Merged '+xauSigs.length+' XAU + '+btcSigs.length+' BTC signals');
+  }catch(e){ toast('Invalid data format'); }
 }
 // ─── SIGNAL STORAGE ─────────────────────────────
 var LS_KEY = 'warroom_signals_v2';
@@ -2714,12 +3053,14 @@ function checkForSignal(){
   var c1h=candles1H.length>=15?candles1H:candles30M;
   if(!c1h||c1h.length<10) return;
 
-  // ── SESSION FILTER ──
+  // ── SESSION FILTER — Fire in all KZ sessions except dead zone ──
   var ist=new Date(now+(5*60+30)*60000);
   var istMins=ist.getUTCHours()*60+ist.getUTCMinutes();
   var kzName=getKZName(istMins);
-  if(kzName==='DEAD_ZONE'||kzName==='OFF_HOURS') return;
+  // Only block dead zone — allow Asian, London Close, London KZ, NY KZ, Silver Bullet
+  if(kzName==='DEAD_ZONE') return;
   var inPrimeKZ=kzName==='LONDON_KZ'||kzName==='NY_KZ'||kzName==='SILVER_BULLET';
+  var inAnyKZ=kzName!=='OFF_HOURS'; // include Asian and London Close too
   var sessionName=kzName==='SILVER_BULLET'?'Silver Bullet':kzName==='NY_KZ'?'NY KZ':
     kzName==='LONDON_KZ'?'London KZ':kzName==='ASIAN'?'Asian':'London Close';
 
@@ -2793,7 +3134,9 @@ function checkForSignal(){
   if(agreeCount<3) return;
   if(finalScore<5) return;
   // In prime KZ: score 4+ is fine; outside KZ: need 6+ (higher bar)
-  if(!inPrimeKZ&&finalScore<6) return;
+  // Off-hours (no session): require higher score; in any KZ: standard threshold
+  if(kzName==='OFF_HOURS'&&finalScore<7) return;
+  if(!inPrimeKZ&&inAnyKZ&&finalScore<5) return; // Asian/LClose: min 5
 
   // SL: use OB boundary if available, else rng-based minimum 40 pips
   var obSLDist=bull&&ob.inBullOB&&ob.bullOB?Math.abs(p-ob.bullOB.bottom*0.999):
@@ -3493,7 +3836,7 @@ function init(){
   fetchBTC();
   // Step 3: load candle volume (all 4 timeframes)
   fetchAllCandles();
-  fetchBTCCandles();
+  fetchBTCCandles(); // now also fetches 4 BTC TFs
   // Step 4: load today's news
   fetchNews();
   // Step 5: request screen wake lock (keeps mobile screen on)
