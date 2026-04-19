@@ -1382,6 +1382,7 @@ void OnDeinit(const int r){EventKillTimer();}</div>
 // STABLE STATE — survives refresh without bias flip
 // ═══════════════════════════════════════════════════
 var XAU = { price:0, high:0, low:0, dailyOpen:0, openFetched:false };
+var goldClosed=false; // updated every render cycle
 var BTC = { price:0, high:0, low:0, dailyOpen:0 };
 var xauCandles=[], btcCandles=[];
 var candles30M=[], candles1H=[], candles4H=[], candlesD=[];
@@ -1414,6 +1415,18 @@ function sw(name,el){
   document.querySelectorAll('.tab').forEach(function(e){ e.classList.remove('on'); });
   gel('tc-'+name).classList.add('on');
   if(el) el.classList.add('on');
+  // Show/hide session bar: BTC is 24/7, sessions only matter for XAUUSD
+  var sbar=document.querySelector('.sbar');
+  if(sbar){
+    if(name==='btc'){
+      sbar.style.display='none';
+    } else {
+      sbar.style.display='';
+    }
+  }
+  // Show BTC 24/7 bar if on BTC tab
+  var btc247=gel('btc-247-bar');
+  if(btc247) btc247.style.display=(name==='btc'?'flex':'none');
 }
 
 // ─── CLOCK + SESSION ─────────────────────────────
@@ -1433,6 +1446,8 @@ function updateClock(){
 
   function setSess(id,a,ov){
     var e=gel(id); if(!e) return;
+    // When gold market is closed, all sessions show neutral
+    if(goldClosed){ e.className='si closed'; return; }
     e.className='si'+(ov?' overlap':a?' active':' closed');
   }
   setSess('ss-syd',sydA,tkSy); setSess('ss-tok',tokA,tkSy);
@@ -1461,6 +1476,9 @@ function updateClock(){
   }
 
   checkUpcomingNews();
+  // Update BTC 24/7 time display
+  var btcTimeEl=gel('btc-247-time');
+  if(btcTimeEl) btcTimeEl.textContent=hh+':'+mm+':'+ss+' IST · 24/7 Active';
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -1623,22 +1641,34 @@ function renderXAU(){
   var ist=new Date(now.getTime()+19800000);
   var dow=ist.getUTCDay(); // 0=Sun,1=Mon,...6=Sat
   var istMins=ist.getUTCHours()*60+ist.getUTCMinutes();
-  // Gold closed: Friday after 23:30 IST (dow=5,mins>=1410) through Sunday 22:59 IST (dow=0,mins<=1379)
-  var goldClosed=(dow===6)||  // all Saturday
-    (dow===5&&istMins>=1410)|| // Friday after 11:30 PM IST
-    (dow===0&&istMins<1380);   // Sunday before 11:00 PM IST
-  var feedEl=gel('feed-lbl'); if(feedEl) feedEl.style.color=goldClosed?'var(--t3)':'var(--green)';
+  // Gold market closed: Saturday all day + Friday 23:30+ IST + Sunday before 23:00 IST
+  goldClosed=(dow===6)||(dow===5&&istMins>=1410)||(dow===0&&istMins<1380);
+  var feedEl=gel('feed-lbl');
   var xe=gel('xp');
-  if(xe){
-    if(goldClosed){
-      xe.style.opacity='0.5';
-      xe.classList.remove('flash');
-      if(feedEl) feedEl.textContent='MARKET CLOSED (Weekend)';
-    } else {
-      xe.style.opacity='1';
-      xe.classList.add('flash');
-      setTimeout(function(){ xe.classList.remove('flash'); },350);
-    }
+  var pdotEl=document.querySelector('.pdot');
+  if(goldClosed){
+    // Market closed — neutralize ALL blink animations
+    if(xe){ xe.style.opacity='0.5'; xe.classList.remove('flash'); }
+    if(feedEl){ feedEl.style.color='var(--t3)'; feedEl.textContent='MARKET CLOSED (Weekend)'; }
+    if(pdotEl){ pdotEl.style.animation='none'; pdotEl.style.background='var(--t3)'; }
+    // Neutralize session dots
+    ['ss-syd','ss-tok','ss-lon','ss-ny'].forEach(function(id){
+      var el=gel(id); if(!el) return;
+      el.className='si closed';
+      var dot=el.querySelector('.sdot');
+      if(dot){ dot.style.animation='none'; dot.style.background='var(--t3)'; }
+    });
+    // Neutralize current volume candle blink
+    var curBars=document.querySelectorAll('.cbar.cur');
+    curBars.forEach(function(b){ b.style.animation='none'; b.style.opacity='0.4'; });
+  } else {
+    // Market open — restore live animations
+    if(xe){ xe.style.opacity='1'; xe.classList.add('flash'); setTimeout(function(){ xe.classList.remove('flash'); },350); }
+    if(feedEl){ feedEl.style.color='var(--green)'; }
+    if(pdotEl){ pdotEl.style.animation=''; pdotEl.style.background=''; }
+    // Restore volume candle blink (renderCandleVol handles class)
+    var curBars2=document.querySelectorAll('.cbar.cur');
+    curBars2.forEach(function(b){ b.style.animation=''; b.style.opacity=''; });
   }
   set('t-spread', (0.28+Math.random()*.12).toFixed(2));
 
@@ -1656,6 +1686,9 @@ function renderBTC(){
   var ce=gel('bc'); if(ce){ ce.textContent=cs; ce.className='val '+(chg>=0?'up':'dn'); }
   var tc=gel('t-btcc'); if(tc){ tc.textContent=(chg>=0?'+':'')+fmtK(chg); tc.className=chg>=0?'tu':'td'; }
   set('bh','$'+fmtK(BTC.high)); set('bl','$'+fmtK(BTC.low));
+  // BTC flashes every second (24/7 — never closed)
+  var bp=gel('bp');
+  if(bp){ bp.classList.add('flash'); setTimeout(function(){ bp.classList.remove('flash'); },350); }
 }
 
 // ─── CANDLE VOLUME (BINANCE) ─────────────────────
@@ -1725,7 +1758,7 @@ function renderCandleVol(cid,candles,sym,curid,avgid,relid,sigid,infoid){
     var isBull=c.close>=c.open;  // use full field names for reliability
     var isCur=i===candles.length-1;
     var barH=Math.max(3,Math.round((c.vol/maxV)*80));
-    var cls='cbar '+(isCur?'cur':isBull?'bull':'bear');
+    var cls='cbar '+(isCur&&!goldClosed?'cur':isBull?'bull':'bear');
     var isHighV=c.vol>avgV*1.5;
     var bdr=isHighV?'box-shadow:0 0 0 1px rgba(240,192,64,.5);':'';
     // Floor to 30-min boundary before converting to IST
