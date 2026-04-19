@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="War Room">
 <meta name="mobile-web-app-capable" content="yes">
-<title>AI Trading War Room v6.3</title>
+<title>AI Trading War Room v6.4</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -403,7 +403,7 @@ button, .tab, .btn, .theme-btn{touch-action:manipulation}
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.3 · SMC · 4TF · XAUUSD+BTC</span></div>
+  <div class="logo">WAR ROOM · AI &nbsp;|&nbsp; <span style="font-size:9px;color:var(--t3)">v6.4 · SMC · 4TF · XAUUSD+BTC</span></div>
   <div class="hr">
     <div class="pill live"><div class="pdot"></div><span id="feed-lbl">CONNECTING</span></div>
     <span class="pill" id="clk">--:--:-- IST</span>
@@ -1313,69 +1313,37 @@ void OnDeinit(const int r){EventKillTimer();}</div>
 
 <!-- ═══ JOURNAL ═══ -->
 <div id="tc-jnl" class="tc">
-  <div class="g4" style="margin-bottom:13px">
-    <div class="mc"><div class="lbl">Total P&L</div><div class="val up">+$255.85</div></div>
-    <div class="mc"><div class="lbl">Win Rate</div><div class="val up">77.8%</div></div>
-    <div class="mc"><div class="lbl">Net Pips</div><div class="val up">+5,117</div></div>
-    <div class="mc"><div class="lbl">Trades</div><div class="val">9</div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;flex-wrap:wrap;gap:8px">
+    <div class="stitle" style="margin:0">Trade Journal — Auto-generated from signals</div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn" style="font-size:8px;padding:3px 9px" onclick="renderJournal()">🔄 Refresh</button>
+      <button class="btn" style="font-size:8px;padding:3px 9px;color:var(--red);border-color:rgba(239,68,68,.4)" onclick="if(confirm('Clear ALL signal history?')){localStorage.removeItem('warroom_signals_v2');localStorage.removeItem('warroom_btc_signals_v2');renderSignalPanels();renderBTCSignalPanels();renderJournal();toast('All signal history cleared');}">🗑 Clear All History</button>
+    </div>
   </div>
-  <div class="stitle">Trade History (0.05 lot · $0.50/pip)</div>
-  <div class="card" style="overflow-x:auto">
-    <table class="jt">
-      <thead><tr><th>#</th><th>DATE</th><th>DIR</th><th>ENTRY</th><th>EXIT</th><th>DIFF</th><th>PIPS</th><th>P&L</th><th>RESULT</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>Apr 01</td><td><span class="tag tb">BUY</span></td><td>4704.72</td><td>4712.42</td><td style="color:var(--green)">+7.70</td><td style="color:var(--green)">+770</td><td style="color:var(--green)">+$38.50</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>2</td><td>Apr 01</td><td><span class="tag tb">BUY</span></td><td>4706.49</td><td>4716.71</td><td style="color:var(--green)">+10.22</td><td style="color:var(--green)">+1,022</td><td style="color:var(--green)">+$51.10</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>3</td><td>Apr 01</td><td><span class="tag tb">BUY</span></td><td>4705.57</td><td>4711.93</td><td style="color:var(--green)">+6.36</td><td style="color:var(--green)">+636</td><td style="color:var(--green)">+$31.80</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>4</td><td>Apr 02</td><td><span class="tag tb">BUY</span></td><td>4600.18</td><td>4596.42</td><td style="color:var(--red)">-3.76</td><td style="color:var(--red)">-376</td><td style="color:var(--red)">-$18.80</td><td><span class="tag ts2">LOSS</span></td></tr>
-        <tr><td>5</td><td>Apr 02</td><td><span class="tag ts2">SELL</span></td><td>4625.66</td><td>4629.31</td><td style="color:var(--red)">-3.65</td><td style="color:var(--red)">-365</td><td style="color:var(--red)">-$18.25</td><td><span class="tag ts2">LOSS</span></td></tr>
-        <tr><td>6</td><td>Apr 02</td><td><span class="tag ts2">SELL</span></td><td>4625.17</td><td>4616.37</td><td style="color:var(--green)">+8.80</td><td style="color:var(--green)">+880</td><td style="color:var(--green)">+$44.00</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>7</td><td>Apr 02</td><td><span class="tag ts2">SELL</span></td><td>4625.43</td><td>4616.37</td><td style="color:var(--green)">+9.06</td><td style="color:var(--green)">+906</td><td style="color:var(--green)">+$45.30</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>8</td><td>Apr 02</td><td><span class="tag ts2">SELL</span></td><td>4624.75</td><td>4616.37</td><td style="color:var(--green)">+8.38</td><td style="color:var(--green)">+838</td><td style="color:var(--green)">+$41.90</td><td><span class="tag tb">WIN</span></td></tr>
-        <tr><td>9</td><td>Apr 02</td><td><span class="tag ts2">SELL</span></td><td>4624.43</td><td>4616.37</td><td style="color:var(--green)">+8.06</td><td style="color:var(--green)">+806</td><td style="color:var(--green)">+$40.30</td><td><span class="tag tb">WIN</span></td></tr>
-      </tbody>
-    </table>
+
+  <!-- Dynamic stats -->
+  <div class="g4" style="margin-bottom:11px">
+    <div class="mc"><div class="lbl">Total P&L</div><div class="val" id="jnl-pnl">---</div></div>
+    <div class="mc"><div class="lbl">Win Rate</div><div class="val" id="jnl-wr">---</div></div>
+    <div class="mc"><div class="lbl">Net Pips</div><div class="val" id="jnl-pips">---</div></div>
+    <div class="mc"><div class="lbl">Signals Total</div><div class="val" id="jnl-ct">---</div></div>
   </div>
-</div>
 
-</div><!-- /main -->
+  <!-- Filters -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+    <button class="btn" id="jf-all"  onclick="filterJournal('all')"  style="font-size:8px;padding:2px 9px;color:var(--gold);border-color:rgba(240,192,64,.4)">ALL</button>
+    <button class="btn" id="jf-xau"  onclick="filterJournal('xau')"  style="font-size:8px;padding:2px 9px">XAU</button>
+    <button class="btn" id="jf-btc"  onclick="filterJournal('btc')"  style="font-size:8px;padding:2px 9px">BTC</button>
+    <button class="btn" id="jf-win"  onclick="filterJournal('win')"  style="font-size:8px;padding:2px 9px;color:var(--green)">WINS</button>
+    <button class="btn" id="jf-loss" onclick="filterJournal('loss')" style="font-size:8px;padding:2px 9px;color:var(--red)">LOSSES</button>
+    <button class="btn" id="jf-open" onclick="filterJournal('open')" style="font-size:8px;padding:2px 9px;color:var(--blue)">OPEN</button>
+  </div>
 
-<!-- SOUND TEST MODAL -->
-<div id="sound-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;align-items:center;justify-content:center">
-  <div style="background:var(--bg2);border:1px solid var(--b2);border-radius:8px;padding:20px 24px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.5)">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <span style="font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.1em">🎵 SOUND ALERT TEST</span>
-      <button onclick="gel('sound-modal').style.display='none'" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px">✕</button>
-    </div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-bottom:14px;line-height:1.6">Click each button to hear the alert sound. If nothing plays, click anywhere on the page first (browser requires user interaction to unlock audio).</div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button class="btn" onclick="playSound('signal_ap');toast('▶ A+ Signal sound')" style="text-align:left;padding:8px 12px;font-size:10px">
-        <span style="color:var(--gold)">★</span> &nbsp;A+ Signal — 4-note triumphant chime
-      </button>
-      <button class="btn buy" onclick="playSound('signal_buy');toast('▶ BUY signal sound')" style="text-align:left;padding:8px 12px;font-size:10px">
-        ▲ &nbsp;A BUY Signal — 2 ascending tones
-      </button>
-      <button class="btn sell" onclick="playSound('signal_sell');toast('▶ SELL signal sound')" style="text-align:left;padding:8px 12px;font-size:10px">
-        ▼ &nbsp;A SELL Signal — 2 descending tones
-      </button>
-      <button class="btn" onclick="playSound('tp_hit');toast('▶ TP Hit sound')" style="text-align:left;padding:8px 12px;font-size:10px;border-color:rgba(34,197,94,.4);color:var(--green)">
-        ✅ &nbsp;TP Hit — happy 5-note arpeggio
-      </button>
-      <button class="btn" onclick="playSound('sl_hit');toast('▶ SL Hit sound')" style="text-align:left;padding:8px 12px;font-size:10px;border-color:rgba(239,68,68,.4);color:var(--red)">
-        ❌ &nbsp;SL Hit — low double warning beep
-      </button>
-      <button class="btn" onclick="playSound('news_warn');toast('▶ News warning sound')" style="text-align:left;padding:8px 12px;font-size:10px;border-color:rgba(239,68,68,.4);color:var(--amber)">
-        ⚠ &nbsp;News Warning — urgent triple beep
-      </button>
-    </div>
-    <div style="margin-top:14px;display:flex;justify-content:flex-end">
-      <button class="btn" onclick="gel('sound-modal').style.display='none'" style="font-size:10px">Close</button>
-    </div>
+  <!-- Trade table -->
+  <div id="jnl-table" style="overflow-x:auto">
+    <div style="text-align:center;color:var(--t3);font-family:var(--mono);font-size:10px;padding:30px">Initialising journal...</div>
   </div>
 </div>
-
-<div class="toast" id="toast-el"></div>
-<div id="nal-box" style="position:fixed;top:76px;right:14px;z-index:9999;display:flex;flex-direction:column;gap:6px;max-width:280px"></div>
 
 <script>
 // ═══════════════════════════════════════════════════
@@ -1427,6 +1395,7 @@ function sw(name,el){
   // Show BTC 24/7 bar if on BTC tab
   var btc247=gel('btc-247-bar');
   if(btc247) btc247.style.display=(name==='btc'?'flex':'none');
+  if(name==='jnl') renderJournal();
 }
 
 // ─── CLOCK + SESSION ─────────────────────────────
@@ -2500,20 +2469,36 @@ function processNewsData(data, source){
     }catch(ex){ return false; }
   });
 
-  // If no events found for today, show upcoming events of this week
   if(!todayEvents.length){
-    var now = new Date();
-    todayEvents = data.filter(function(e){
-      if(!e.date) return false;
-      try{
-        return new Date(e.date) >= now;
-      }catch(ex){ return false; }
-    }).slice(0,12);
-    gel('news-feed-status').textContent = 'No events today — showing upcoming';
-    gel('news-feed-status').style.color = 'var(--amber)';
+    var ist2=new Date(Date.now()+19800000);
+    var dow2=ist2.getUTCDay();
+    var isWeekend=(dow2===0||dow2===6);
+    var statusEl=gel('news-feed-status');
+    if(isWeekend){
+      var daysToMon=dow2===0?1:2;
+      newsEvents=[{title:'Markets closed — no events this weekend',country:'USD',impact:'Low',
+        forecast:'',previous:'',actual:'',
+        _istDate:new Date(Date.now()+daysToMon*86400000),
+        _istTime:'--:--',_utcDate:new Date(Date.now()+daysToMon*86400000)}];
+      if(statusEl){statusEl.textContent='Weekend — markets closed. Next events Monday.';statusEl.style.color='var(--t3)';}
+      newsLoadedDate=todayIST;
+      set('news-lbl','NEWS: WEEKEND');
+      gel('news-lbl').style.color='var(--t3)';
+      set('news-today-ct','0 (weekend)');
+      set('db-newsct','weekend');
+      set('news-src','Weekend — next events Monday '+ist2.toISOString().slice(5,10));
+      renderNews();buildTicker();return;
+    } else {
+      var next24h=new Date(Date.now()+86400000);
+      todayEvents=data.filter(function(e){
+        if(!e.date)return false;
+        try{var d=new Date(e.date);return d>=new Date()&&d<=next24h;}catch(ex){return false;}
+      }).slice(0,8);
+      if(statusEl){statusEl.textContent='No events today — showing next 24h';statusEl.style.color='var(--amber)';}
+    }
   } else {
-    gel('news-feed-status').textContent = 'Loaded via '+source+' · '+todayEvents.length+' events';
-    gel('news-feed-status').style.color = 'var(--green)';
+    var statusEl2=gel('news-feed-status');
+    if(statusEl2){statusEl2.textContent='Loaded via '+source+' · '+todayEvents.length+' events';statusEl2.style.color='var(--green)';}
   }
 
   // Map to IST times
@@ -3582,7 +3567,7 @@ function buildSignalCard(sig, isLatest, showProgress){
   return '<div class="sc" style="'+borderStyle+'">'+
     '<span class="sc-badge sc-'+(sig.quality==='A+'?'ap':'a')+'">'+sig.quality+' SETUP · Score '+sig.score+'/8</span>'+
     (isLatest?'<span style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:2px;background:rgba(240,192,64,.15);color:var(--gold);margin-left:6px">★ LATEST</span>':'')+
-    '<div class="sc-time">'+sig.time+' · Signal #'+(sigCount)+' · Open: '+sig.dailyOpen+(sig.session?' · '+sig.session:'')+' session</div>'+
+    '<div class="sc-time"><span style="background:rgba(240,192,64,.15);color:var(--gold);padding:1px 6px;border-radius:2px;font-weight:700;margin-right:6px">'+sig.date+'</span>'+sig.time+(sig.session?' · <span style="color:var(--blue)">'+sig.session+'</span>':'')+' · Open: '+sig.dailyOpen+'</div>'+
     '<div class="sc-title" style="color:'+(bull?'var(--green)':'var(--red)')+'">'+sig.dir+' '+(isBTC?'BTCUSD':'XAUUSD')+' @ '+(isBTC?'$'+fmtK(sig.entry):sig.entry)+'&nbsp;<span style="font-size:9px;color:var(--t3)">R:R 1:'+sig.rr+(sig.inGolden?' · ★ GP':'')+' · At signal: '+(isBTC?'$'+fmtK(sig.priceAtSignal):sig.priceAtSignal)+'</span></div>'+
     '<div class="sc-grid">'+
       '<div class="sc-box"><div class="sk">ENTRY</div><div class="sv" style="color:var(--gold)">'+(isBTC?'$'+fmtK(sig.entry):sig.entry)+'</div></div>'+
@@ -3839,6 +3824,102 @@ function updateADR(){
 }
 
 // ─── INIT ─────────────────────────────────────────
+
+// ─── JOURNAL — DYNAMIC FROM SIGNAL HISTORY ───────
+var journalFilter='all';
+
+function filterJournal(f){
+  journalFilter=f;
+  // Highlight active filter button
+  ['all','xau','btc','win','loss','open'].forEach(function(id){
+    var el=document.getElementById('jf-'+id);
+    if(!el) return;
+    el.style.color=''; el.style.borderColor='';
+  });
+  var fEl=document.getElementById('jf-'+f);
+  if(fEl){
+    var col=f==='win'?'var(--green)':f==='loss'?'var(--red)':f==='open'?'var(--blue)':f==='xau'?'var(--amber)':f==='btc'?'var(--blue)':'var(--gold)';
+    fEl.style.color=col; fEl.style.borderColor=col;
+  }
+  renderJournal();
+}
+
+function renderJournal(){
+  var xauSigs=loadSignals();
+  var btcSigs=loadBTCSignals();
+  // Tag each signal with its instrument
+  var allSigs=xauSigs.map(function(s){return Object.assign({},s,{sym:'XAU'});})
+    .concat(btcSigs.map(function(s){return Object.assign({},s,{sym:'BTC'});}));
+  // Sort newest first
+  allSigs.sort(function(a,b){return (b.id||0)-(a.id||0);});
+
+  // Apply filter
+  var filtered=allSigs.filter(function(s){
+    if(journalFilter==='xau') return s.sym==='XAU';
+    if(journalFilter==='btc') return s.sym==='BTC';
+    if(journalFilter==='win') return s.outcome==='tp1'||s.outcome==='tp2';
+    if(journalFilter==='loss') return s.outcome==='sl';
+    if(journalFilter==='open') return s.outcome==='open';
+    return true;
+  });
+
+  // Calculate stats from ALL signals (not just filtered)
+  var closed=allSigs.filter(function(s){return s.outcome!=='open';});
+  var wins=closed.filter(function(s){return s.outcome==='tp1'||s.outcome==='tp2';});
+  var losses=closed.filter(function(s){return s.outcome==='sl';});
+  var netPips=closed.reduce(function(a,s){return a+(s.pnlPips||0);},0);
+  var netPnl=netPips*0.5*0.05; // 0.05 lot, $0.50/pip
+  var wr=closed.length>0?Math.round(wins.length/closed.length*100):0;
+
+  set('jnl-pnl',(netPnl>=0?'+':'')+netPnl.toFixed(2)+'  USD');
+  set('jnl-wr',wr+'% ('+wins.length+'/'+closed.length+')');
+  set('jnl-pips',(netPips>=0?'+':'')+netPips+' pips');
+  set('jnl-ct',allSigs.length+' signals · '+closed.length+' closed');
+  var pnlEl=gel('jnl-pnl'); if(pnlEl) pnlEl.className='val '+(netPnl>=0?'up':'dn');
+  var wrEl=gel('jnl-wr'); if(wrEl) wrEl.className='val '+(wr>=50?'up':'dn');
+  var pipEl=gel('jnl-pips'); if(pipEl) pipEl.className='val '+(netPips>=0?'up':'dn');
+
+  var tbl=gel('jnl-table');
+  if(!tbl) return;
+  if(!filtered.length){
+    tbl.innerHTML='<div style="text-align:center;color:var(--t3);font-family:var(--mono);font-size:10px;padding:30px">'+(allSigs.length===0?'No signals yet. Signals appear here automatically when the engine fires.':'No signals match this filter.')+'</div>';
+    return;
+  }
+
+  var rows=filtered.map(function(s,idx){
+    var isBTC=s.sym==='BTC';
+    var bull=s.dir==='BUY';
+    var outcome=s.outcome||'open';
+    var isWin=outcome==='tp1'||outcome==='tp2';
+    var isLoss=outcome==='sl';
+    var isOpen=outcome==='open';
+    var pips=s.pnlPips||0;
+    var pnl=pips*0.5*0.05;
+    var outcomeTag=isWin?'<span class="tag tb">'+outcome.toUpperCase()+'</span>':isLoss?'<span class="tag ts2">SL HIT</span>':'<span class="tag ti">OPEN</span>';
+    var pipsCell=isOpen?'<span style="color:var(--t3)">open</span>':((pips>=0?'+':'')+pips);
+    var pnlCell=isOpen?'<span style="color:var(--t3)">—</span>':((pnl>=0?'+':'')+pnl.toFixed(2));
+    var pipsColor=pips>0?'color:var(--green)':pips<0?'color:var(--red)':'';
+    return '<tr>'+
+      '<td style="color:var(--t3)">'+(filtered.length-idx)+'</td>'+
+      '<td><span style="font-weight:700;color:var(--gold)">'+(s.date||'')+'</span><br><span style="color:var(--t3);font-size:7px">'+(s.time||'').slice(0,5)+'</span></td>'+
+      '<td><span style="font-size:8px;font-weight:700;color:var(--t3)">'+(isBTC?'BTC':'XAU')+'</span><br>'+
+        '<span class="tag '+(bull?'tb':'ts2')+'" style="font-size:7px">'+(bull?'BUY':'SELL')+'</span></td>'+
+      '<td style="font-family:var(--mono);font-size:9px">'+(isBTC?'$'+fmtK(s.entry):s.entry)+'</td>'+
+      '<td style="font-family:var(--mono);font-size:9px;color:var(--red)">'+(isBTC?'$'+fmtK(s.sl):s.sl)+'</td>'+
+      '<td style="font-family:var(--mono);font-size:9px;color:var(--green)">'+(isBTC?'$'+fmtK(s.tp1):s.tp1)+'</td>'+
+      '<td style="font-family:var(--mono);font-size:9px;'+pipsColor+'">'+(isOpen?'—':pipsCell+'p')+'</td>'+
+      '<td style="font-family:var(--mono);font-size:9px;'+pipsColor+'">'+(isOpen?'—':'$'+pnlCell)+'</td>'+
+      '<td>'+outcomeTag+'<br><span style="font-size:7px;color:var(--t3)">'+(s.session||'')+'</span></td>'+
+    '</tr>';
+  }).join('');
+
+  tbl.innerHTML='<table class="jt"><thead><tr>'+
+    '<th>#</th><th>DATE</th><th>SYM/DIR</th><th>ENTRY</th><th>STOP LOSS</th><th>TP1</th><th>PIPS</th><th>P&L</th><th>RESULT</th>'+
+    '</tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div style="font-family:var(--mono);font-size:8px;color:var(--t3);padding:8px 0;text-align:right">'+
+    filtered.length+' trades shown · 0.05 lot · $0.50/pip</div>';
+}
+
 function init(){
   // Apply saved theme immediately (before anything renders)
   applyStoredTheme();
@@ -3855,6 +3936,7 @@ function init(){
     lastSignalPrice=last.entry;
   }
   renderSignalPanels();
+  renderJournal();
   // Restore BTC signals too
   var storedBTC=loadBTCSignals();
   btcTodaySigCount=storedBTC.filter(function(s){ return s.date===todayIST; }).length;
