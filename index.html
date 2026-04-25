@@ -58,6 +58,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 .fib-row:last-child{border-bottom:none;}.fib-row.near{background:rgba(245,158,11,.04);border-left:3px solid var(--amber);}
 .fib-row.here{background:rgba(240,192,64,.08);border-left:3px solid var(--gold);}.fib-row.key{background:rgba(34,197,94,.04);}
 .fib-bar{width:7px;flex-shrink:0;}.fib-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);width:72px;padding:7px 6px;flex-shrink:0;}.fib-price{font-family:var(--mono);font-size:11px;font-weight:600;flex:1;padding:7px 6px;}.fib-dist{font-family:var(--mono);font-size:8px;color:var(--t3);padding:7px 6px;text-align:right;}.fib-here{font-family:var(--mono);font-size:9px;color:var(--gold);padding:7px 6px;animation:blink 1s infinite;}
+.mkt-closed .fib-here{animation:none;opacity:.5;}
 .score-big{font-family:var(--mono);font-size:36px;font-weight:700;line-height:1;}
 .reasons{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0;}
 .reason{font-family:var(--mono);font-size:7px;padding:2px 6px;border-radius:2px;background:var(--bg3);color:var(--t2);}
@@ -115,6 +116,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100
 @keyframes slin{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes flash{0%{color:var(--goldf)}100%{color:var(--gold)}}
 .flash{animation:flash .4s ease;}
+.mkt-closed .flash{animation:none;}
 </style>
 </head>
 <body>
@@ -408,6 +410,7 @@ function renderXAU(){
 
 // CANDLES
 function fetchCandles(){
+  if(goldClosed){renderVolClosed();return;}
   // Try Binance spot first, then futures as fallback
   var bases=[
     'https://api.binance.com/api/v3/klines?symbol=XAUUSDT&interval=',
@@ -437,7 +440,16 @@ function fetchCandles(){
 }
 
 // Simulated volume candles from price data when Binance unavailable
+function renderVolClosed(){
+  var el=gel('vol-candles');
+  if(el)el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:75px;font-family:var(--mono);font-size:9px;color:var(--t3)">🔴 Market closed — volume resumes Monday</div>';
+  set('vol-info','Gold market closed (weekend)');
+  ['v-cur','v-avg','v-rel','v-sig'].forEach(function(id){set(id,'--');});
+}
+
 function buildSimVol(){
+  if(goldClosed){renderVolClosed();return;}
+  if(goldClosed){renderVolClosed();return;}
   var p=XAU.price||3300,o=XAU.dailyOpen||p,h=XAU.high||p,l=XAU.low||p;
   var arr=[];var tp=o;
   for(var i=47;i>=0;i--){
@@ -454,6 +466,7 @@ function buildSimVol(){
   c30M=arr;renderVol(arr);
 }
 function renderVol(candles){
+  if(goldClosed){renderVolClosed();return;}
   var el=gel('vol-candles');if(!el||!candles.length)return;
   var vols=candles.map(function(c){return c.vol;}),maxV=Math.max.apply(null,vols)||1;
   var avgV=vols.slice(-11,-1).reduce(function(a,b){return a+b;},0)/10;
@@ -542,6 +555,23 @@ function detect15M(){
 // MAIN UPDATE
 function cycleTF(){var tfs=['1H','4H','D'];activeTF=tfs[(tfs.indexOf(activeTF)+1)%tfs.length];set('tf-btn','TF: '+activeTF);updateFib();}
 function updateFib(){
+  // Do NOT update levels or 15M panel when market is closed
+  if(goldClosed){
+    // Show closed state in all panels
+    var fr=gel('fib-rows');
+    if(fr)fr.innerHTML='<div style="text-align:center;padding:24px;font-family:var(--mono);font-size:9px;color:var(--t3)">🔴 Gold market closed (weekend)<br><span style="font-size:8px">Fibonacci levels update when market reopens Sunday 11 PM IST</span></div>';
+    var cv=gel('c-vis');
+    if(cv)cv.innerHTML='<div style="text-align:center;padding:16px;font-family:var(--mono);font-size:9px;color:var(--t3)">Market closed</div>';
+    ['c-level','c-pat','c-dir','c-conf'].forEach(function(id){setTag(id,'tw','CLOSED');});
+    set('c-body','--');set('c-status','Gold market closed. 15M analysis resumes when market opens.');
+    var act=gel('sc-action');if(act)act.textContent='Gold market closed (weekend). Analysis and alerts resume Sunday 11 PM IST when market reopens.';
+    var sn=gel('sc-num');if(sn){sn.textContent='--';sn.style.color='var(--t3)';}
+    setTag('sc-grade','tw','CLOSED');
+    var sd=gel('sc-dir');if(sd){sd.textContent='MARKET CLOSED';sd.style.color='var(--t3)';}
+    set('sc-level','--');
+    var rEl=gel('sc-reasons');if(rEl)rEl.innerHTML='';
+    return;
+  }
   var p=XAU.price;if(!p)return;
   var swD=detectSwing(cD,3),sw4=detectSwing(c4H,4),sw1=detectSwing(c1H,4);
 
@@ -935,7 +965,7 @@ function init(){
   updateClock();
   setInterval(updateClock,1000);setInterval(fetchXAU,1000);setInterval(fetchCandles,60000);
   // Fallback: if no 30M data after 4s, build sim candles from price
-  setTimeout(function(){if(!c30M||!c30M.length){buildSimVol();}},4000);
+  setTimeout(function(){if(!c30M||!c30M.length){if(goldClosed)renderVolClosed();else buildSimVol();}},4000);
   setInterval(renderNews,30000);setInterval(fetchNews,900000);setInterval(renderSigs,10000);
   document.addEventListener('click',function(){try{new(window.AudioContext||window.webkitAudioContext)().resume();}catch(e){}},{once:true});
 }
