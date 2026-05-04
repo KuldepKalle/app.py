@@ -758,16 +758,17 @@ function calcEMA9(closes){
 function calcVWAP(candles){
   if(!candles||candles.length<2)return null;
   var cumTPV=0,cumV=0;
-  // Use today's candles only (IST day boundary reset)
+  // Anchor VWAP to today's candles; fallback to last 30 if not enough today
   var today=getISTStr();
   var todayC=candles.filter(function(c){
     var ist=new Date(c.t+19800000);
     return ist.toISOString().slice(0,10)===today;
   });
-  var arr=todayC.length>=3?todayC:candles.slice(-Math.min(20,candles.length));
+  // Use today's candles if we have at least 1, otherwise last 30
+  var arr=todayC.length>=1?todayC:candles.slice(-Math.min(30,candles.length));
   arr.forEach(function(c){
     var tp=(c.high+c.low+c.close)/3;
-    cumTPV+=tp*c.vol;cumV+=c.vol;
+    cumTPV+=tp*(c.vol||1);cumV+=(c.vol||1);
   });
   return cumV>0?cumTPV/cumV:null;
 }
@@ -1032,12 +1033,12 @@ function checkSignal(sym,res,price){
   var ist3=getIST(),m3=ist3.getUTCHours()*60+ist3.getUTCMinutes();
   var kz3=!isBTC?getKZ(m3):'ALL';
   var isPrime=kz3==='LONDON_KZ'||kz3==='NY_KZ'||kz3==='SILVER_BULLET';
-  var minScore=isPrime?5:6;
-  if(res.score<minScore)return;
+  // Score gate: minimum 5 in any session — candle-close logic is the real gate
+  if(res.score<5)return;
   // Must have at minimum A grade
   var now=Date.now();
   var lastCheck=isBTC?btcLastCheck:xauLastCheck;
-  if(now-lastCheck<60000)return;
+  if(now-lastCheck<5000)return; // check every 5s (was 60s)
   if(isBTC)btcLastCheck=now;else xauLastCheck=now;
 
   // Cooldown 3h per direction
@@ -1076,9 +1077,10 @@ function checkSignal(sym,res,price){
   var ist2=getIST(),ts=String(ist2.getUTCHours()).padStart(2,'0')+':'+String(ist2.getUTCMinutes()).padStart(2,'0')+':'+String(ist2.getUTCSeconds()).padStart(2,'0')+' IST';
   var kz=!isBTC?getKZ(ist2.getUTCHours()*60+ist2.getUTCMinutes()):'24/7';
   // Build SL/TP explanation
+  var dir=res.dir; // local alias so all dir=== checks work
   var slLogic=dir==='bull'?
-    'SL at '+fmt(sl,2)+' — below 1H VWAP ('+fmt(res.vwap1H||0,2)+'), structure invalidated if price returns below VWAP+EMA9':
-    'SL at '+fmt(sl,2)+' — above 1H VWAP ('+fmt(res.vwap1H||0,2)+'), structure invalidated if price returns above VWAP+EMA9';
+    'SL at '+fmt(sl)+' — below 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price returns below VWAP+EMA9':
+    'SL at '+fmt(sl)+' — above 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price returns above VWAP+EMA9';
   var tp1Logic='TP1 at '+fmt(tp1,2)+' — 1:2 R:R (SL='+slPips+(isBTC?'$':'p')+', TP1='+tp1Pips+(isBTC?'$':'p')+')';
   var tp2Logic='TP2 at '+fmt(tp2,2)+' — 1:3.5 R:R (extended target on momentum continuation)';
   var sig={
@@ -1094,9 +1096,9 @@ function checkSignal(sym,res,price){
   renderSigs(sym);renderJnl();renderAllSigs();
   lastSignalTime=Date.now();
   var bull=res.dir==='bull';
-  var slReason=dir==='bull'?
-    'SL '+fmt(sl)+' = below 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price returns below VWAP+EMA9':
-    'SL '+fmt(sl)+' = above 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price returns above VWAP+EMA9';
+  var slReason=res.dir==='bull'?
+    'SL '+fmt(sl)+' = below 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price closes below VWAP+EMA9':
+    'SL '+fmt(sl)+' = above 1H VWAP ('+fmt(res.vwap1H||0)+') — invalid if price closes above VWAP+EMA9';
   var tp1Reason='TP1 '+fmt(tp1)+' = 2x SL distance ('+tp1Pips+(isBTC?'$':'p')+')';
   var tp2Reason='TP2 '+fmt(tp2)+' = 3.5x SL distance (momentum target)';
   var alertBody=res.reasons.slice(0,3).join(' | ')+'\n'+slReason+'\n'+tp1Reason+'\n'+tp2Reason;
@@ -1845,7 +1847,11 @@ function updatePanel(sym,res,price){
     } else if(res.dir!=='neutral'){
       act.textContent='Partial setup (score '+res.score+'/10). Need: both 4H and 1H candles to close '+(bull?'green above':'red below')+' VWAP+EMA9.';
     } else {
-      act.textContent='No setup. Waiting for 4H+1H candles to close on same side of VWAP+EMA9. VWAP4H: '+(res.vwap4H?res.vwap4H.toFixed(2):'loading...')+', VWAP1H: '+(res.vwap1H?res.vwap1H.toFixed(2):'loading...')+'.';
+      var vd=res.vwap1H?res.vwap1H.toFixed(2):'loading',ed=res.ema9_1H?res.ema9_1H.toFixed(2):'loading';
+    var curr1=res.confirmed1H,curr4=res.confirmed4H;
+    var c1stat=curr1?'1H last close: '+curr1.close.toFixed(2)+' ('+(curr1.close>curr1.open?'GREEN':'RED')+')':'1H loading';
+    var c4stat=curr4?'4H last close: '+curr4.close.toFixed(2)+' ('+(curr4.close>curr4.open?'GREEN':'RED')+')':'4H loading';
+    act.textContent='Monitoring. '+c1stat+'. '+c4stat+'. VWAP1H:'+vd+' EMA9:'+ed+'. Need: 1H red candle closed below both + 4H red candle for SELL (vice versa for BUY).';
     }
   }
 }
